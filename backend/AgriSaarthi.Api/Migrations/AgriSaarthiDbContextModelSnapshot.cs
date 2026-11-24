@@ -22,6 +22,56 @@ namespace AgriSaarthi.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AgriSaarthi.Api.Models.CropAdvisory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("ConfidenceScore")
+                        .HasColumnType("float");
+
+                    b.Property<int>("FarmerId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Humidity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Nitrogen")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Ph")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Phosphorus")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Potassium")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Rainfall")
+                        .HasColumnType("float");
+
+                    b.Property<string>("RecommendedCrop")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Temperature")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FarmerId");
+
+                    b.ToTable("CropAdvisories");
+                });
+
             modelBuilder.Entity("AgriSaarthi.Api.Models.Farmer", b =>
                 {
                     b.Property<int>("Id")
@@ -115,11 +165,214 @@ namespace AgriSaarthi.Api.Migrations
                     b.ToTable("FarmerProfiles");
                 });
 
+            modelBuilder.Entity("AgriSaarthi.Api.Models.MarketPriceItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Commodity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Market")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal>("MaxPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ModalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Trend")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MarketPrices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Commodity = "Wheat (Kanak)",
+                            Market = "Khanna Mandi",
+                            MaxPrice = 2450m,
+                            MinPrice = 2275m,
+                            ModalPrice = 2375m,
+                            State = "Punjab",
+                            Trend = "up",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Commodity = "Paddy (Basmati)",
+                            Market = "Amritsar Mandi",
+                            MaxPrice = 4250m,
+                            MinPrice = 3600m,
+                            ModalPrice = 3950m,
+                            State = "Punjab",
+                            Trend = "up",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Commodity = "Cotton (Kapas)",
+                            Market = "Bathinda Mandi",
+                            MaxPrice = 7450m,
+                            MinPrice = 6900m,
+                            ModalPrice = 7200m,
+                            State = "Punjab",
+                            Trend = "down",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Commodity = "Maize (Makka)",
+                            Market = "Jalandhar Mandi",
+                            MaxPrice = 2200m,
+                            MinPrice = 1950m,
+                            ModalPrice = 2100m,
+                            State = "Punjab",
+                            Trend = "stable",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Commodity = "Mustard (Sarson)",
+                            Market = "Sirsa Mandi",
+                            MaxPrice = 5850m,
+                            MinPrice = 5400m,
+                            ModalPrice = 5650m,
+                            State = "Haryana",
+                            Trend = "up",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Commodity = "Potato (Aloo)",
+                            Market = "Hoshiarpur Mandi",
+                            MaxPrice = 1450m,
+                            MinPrice = 1100m,
+                            ModalPrice = 1300m,
+                            State = "Punjab",
+                            Trend = "up",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Commodity = "Sugarcane",
+                            Market = "Phagwara Mandi",
+                            MaxPrice = 410m,
+                            MinPrice = 380m,
+                            ModalPrice = 395m,
+                            State = "Punjab",
+                            Trend = "stable",
+                            UpdatedDate = new DateTime(2026, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("AgriSaarthi.Api.Models.WeatherQuery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdvisoryNotes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Condition")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("FarmerId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Humidity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("QueryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Temperature")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WindSpeed")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FarmerId");
+
+                    b.ToTable("WeatherQueries");
+                });
+
+            modelBuilder.Entity("AgriSaarthi.Api.Models.CropAdvisory", b =>
+                {
+                    b.HasOne("AgriSaarthi.Api.Models.Farmer", "Farmer")
+                        .WithMany()
+                        .HasForeignKey("FarmerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Farmer");
+                });
+
             modelBuilder.Entity("AgriSaarthi.Api.Models.FarmerProfile", b =>
                 {
                     b.HasOne("AgriSaarthi.Api.Models.Farmer", "Farmer")
                         .WithOne("Profile")
                         .HasForeignKey("AgriSaarthi.Api.Models.FarmerProfile", "FarmerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Farmer");
+                });
+
+            modelBuilder.Entity("AgriSaarthi.Api.Models.WeatherQuery", b =>
+                {
+                    b.HasOne("AgriSaarthi.Api.Models.Farmer", "Farmer")
+                        .WithMany()
+                        .HasForeignKey("FarmerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

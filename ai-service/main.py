@@ -88,22 +88,37 @@ def predict_crop(request: CropRecommendationRequest):
 
 
 from fastapi import UploadFile, File
-import torch
-import torch.nn as nn
-from torchvision import models, transforms
-from PIL import Image
 import io
 import json
+
+try:
+    import torch
+    import torch.nn as nn
+    from torchvision import models, transforms
+    from PIL import Image
+    TORCH_AVAILABLE = True
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    disease_transforms = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+except ImportError:
+    TORCH_AVAILABLE = False
+    device = None
+    disease_transforms = None
 
 disease_model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'disease-detection', 'model', 'disease_model.pth')
 classes_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'disease-detection', 'model', 'classes.json')
 
 disease_model = None
 disease_classes = []
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def load_disease_model():
     global disease_model, disease_classes
+    if not TORCH_AVAILABLE:
+        print("Notice: PyTorch not installed; disease detection endpoint will return 503 until torch is installed.")
+        return
     if os.path.exists(disease_model_path) and os.path.exists(classes_path):
         try:
             with open(classes_path, "r") as f:
@@ -126,15 +141,9 @@ def startup_event():
     load_crop_model()
     load_disease_model()
 
-disease_transforms = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
-
 @app.post("/predict/disease")
 async def predict_disease(file: UploadFile = File(...)):
-    if disease_model is None:
+    if not TORCH_AVAILABLE or disease_model is None:
         raise HTTPException(status_code=503, detail="Disease detection model is not loaded or unavailable.")
     
     if not file.content_type.startswith("image/"):

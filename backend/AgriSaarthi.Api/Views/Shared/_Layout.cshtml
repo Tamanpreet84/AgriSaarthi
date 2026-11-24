@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AgriSaarthi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#1B4332',
+                            primary: '#2D6A4F',
+                            medium: '#40916C',
+                            light: '#52B788',
+                            soft: '#E8F3EE',
+                            gold: '#D97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f7f5; }
+        .sidebar-active {
+            background-color: #e8f3ee;
+            color: #1b4332;
+            font-weight: 600;
+            border-left: 4px solid #2d6a4f;
+        }
+    </style>
+</head>
+<body class="bg-[#f3f7f5] text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Desktop Sidebar -->
+        <aside class="hidden lg:flex w-72 flex-col bg-white border-r border-slate-200 z-30">
+            <!-- Brand Logo Header -->
+            <div class="p-5 border-b border-slate-100 flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-soft flex items-center justify-center text-brand-dark shadow-sm">
+                    <i class="fa-solid fa-leaf text-xl text-[#27ae60]"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-brand-dark tracking-tight leading-none">AgriSaarthi</h1>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-brand-gold mt-1">Know More • Grow More</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto p-4 space-y-1.5 text-sm font-medium">
+                <a asp-controller="Home" asp-action="Dashboard" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-house w-5 text-center text-slate-500"></i>
+                    <span>Farmer Dashboard</span>
+                </a>
+
+                <a asp-controller="Crop" asp-action="Recommend" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Crop" ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-seedling w-5 text-center text-[#27ae60]"></i>
+                    <span>Crop Advisory</span>
+                </a>
+
+                <a href="/weather" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/weather") == true ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-cloud-sun w-5 text-center text-sky-500"></i>
+                    <span>Weather Forecast</span>
+                </a>
+
+                <a href="/market-prices" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/market-prices") == true ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-indian-rupee-sign w-5 text-center text-amber-500"></i>
+                    <span>Mandi Market Rates</span>
+                </a>
+
+                <a href="/disease-detection" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/disease-detection") == true ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-microscope w-5 text-center text-emerald-600"></i>
+                    <span>Plant Health & Disease</span>
+                </a>
+
+                <a href="/farming-tips" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/farming-tips") == true ? "sidebar-active" : "")">
+                    <i class="fa-regular fa-lightbulb w-5 text-center text-amber-500"></i>
+                    <span>Farming Tips</span>
+                </a>
+
+                <a href="/knowledge-hub" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/knowledge-hub") == true ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-book-open w-5 text-center text-blue-500"></i>
+                    <span>Knowledge Hub</span>
+                </a>
+
+                <div class="pt-4 pb-1">
+                    <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Farmer Account</p>
+                </div>
+
+                <a asp-controller="Home" asp-action="Profile" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "sidebar-active" : "")">
+                    <i class="fa-solid fa-user-gear w-5 text-center text-slate-500"></i>
+                    <span>Farmer Profile</span>
+                </a>
+            </nav>
+
+            <!-- User Footer Profile Card -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <div class="w-9 h-9 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shadow">
+                        @(User.Identity?.Name?.Substring(0, 1).ToUpper() ?? "F")
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-slate-800 truncate">@(User.Identity?.Name ?? "Taman Preet Singh")</p>
+                        <p class="text-[10px] text-slate-500 truncate">Registered Farmer</p>
+                    </div>
+                </div>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" title="Logout" class="text-slate-400 hover:text-red-600 p-1.5 rounded-lg transition-colors">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sm:px-6 z-20">
+                <div class="flex items-center space-x-3">
+                    <button class="lg:hidden text-slate-600 hover:text-brand-dark p-2" onclick="document.querySelector('aside').classList.toggle('hidden')">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <div>
+                        <span class="text-xs font-bold text-brand-medium uppercase tracking-wider">ASP.NET Core • SQL Server</span>
+                        <h2 class="text-base sm:text-lg font-bold text-brand-dark leading-tight">AgriSaarthi Advisory System</h2>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <!-- Status Badge -->
+                    <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                        SQL Server Connected
+                    </span>
+
+                    <!-- Quick Language Pill -->
+                    <div class="hidden md:flex items-center bg-slate-100 rounded-lg p-1 text-xs font-medium text-slate-600">
+                        <span class="px-2 py-0.5 rounded bg-white font-bold text-brand-dark shadow-sm">EN</span>
+                        <span class="px-2 py-0.5 text-slate-500 hover:text-brand-dark cursor-pointer">हिंदी</span>
+                        <span class="px-2 py-0.5 text-slate-500 hover:text-brand-dark cursor-pointer">ਪੰਜਾਬੀ</span>
+                    </div>
+
+                    <!-- User Profile Dropdown shortcut -->
+                    <a asp-controller="Home" asp-action="Profile" class="flex items-center space-x-2 text-sm text-slate-700 hover:text-brand-dark font-medium">
+                        <div class="w-8 h-8 rounded-full bg-[#e8f3ee] text-brand-dark font-bold flex items-center justify-center border border-brand-light">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Scrollable Page Body -->
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="mb-4 bg-emerald-50 border-l-4 border-emerald-500 p-3.5 rounded-r-lg flex items-center text-emerald-800 text-sm">
+                        <i class="fa-solid fa-circle-check text-emerald-500 mr-2 text-base"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                    </div>
+                }
+                @RenderBody()
+            </main>
+
+            <!-- Mobile Bottom Navbar -->
+            <div class="lg:hidden bg-white border-t border-slate-200 flex justify-around items-center h-16 px-2 z-40">
+                <a asp-controller="Home" asp-action="Dashboard" class="flex flex-col items-center justify-center text-brand-dark">
+                    <i class="fa-solid fa-house text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Home</span>
+                </a>
+                <a asp-controller="Crop" asp-action="Recommend" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
+                    <i class="fa-solid fa-seedling text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Advisory</span>
+                </a>
+                <a href="/weather" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
+                    <i class="fa-solid fa-cloud-sun text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Weather</span>
+                </a>
+                <a href="/market-prices" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
+                    <i class="fa-solid fa-indian-rupee-sign text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Prices</span>
+                </a>
+                <a asp-controller="Home" asp-action="Profile" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
+                    <i class="fa-solid fa-user text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Profile</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,100 @@
+@model AgriSaarthi.Api.Models.ViewModels.WeatherViewModel
+@{
+    ViewData["Title"] = "Weather Advisory & Forecast";
+}
+
+<div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- Header Banner -->
+    <div class="bg-gradient-to-r from-sky-600 to-blue-800 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/20 text-sky-100">Open-Meteo Telemetry</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold mt-2 tracking-tight">Agricultural Weather Advisory</h1>
+                <p class="text-sky-100 text-sm mt-1">Hyperlocal weather telemetries and operational farming guidance for <span class="font-bold underline">@Model.City</span></p>
+            </div>
+            <div class="text-right">
+                <span class="text-4xl sm:text-5xl font-black">@Model.CurrentTemp°C</span>
+                <span class="block text-xs text-sky-200 mt-1">@Model.Condition • Wind: @Model.WindSpeed km/h</span>
+            </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                <span class="text-sky-200 block text-[10px]">Relative Humidity</span>
+                <span class="font-bold text-base text-white">@Model.Humidity%</span>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                <span class="text-sky-200 block text-[10px]">Rain Chance</span>
+                <span class="font-bold text-base text-white">@Model.RainfallProbability%</span>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                <span class="text-sky-200 block text-[10px]">Latitude / Longitude</span>
+                <span class="font-bold text-xs text-white">@Model.Latitude, @Model.Longitude</span>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                <span class="text-sky-200 block text-[10px]">Field Operation Status</span>
+                <span class="font-bold text-xs text-emerald-300">Favorable</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 Actionable Agronomic Guidelines -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3">
+                <i class="fa-solid fa-droplet"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Irrigation Strategy</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">@Model.IrrigationAdvice</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3">
+                <i class="fa-solid fa-spray-can"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Chemical Spraying Window</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">@Model.SprayingAdvice</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#27ae60] flex items-center justify-center text-lg mb-3">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm">Crop Monitoring Index</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">@Model.SowingStatus</p>
+        </div>
+    </div>
+
+    <!-- 7-Day Forecast Grid -->
+    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-sm pb-4 border-b border-slate-100 flex items-center space-x-2">
+            <i class="fa-solid fa-calendar-days text-sky-500"></i>
+            <span>7-Day Agricultural Forecast Outlook</span>
+        </h3>
+
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-center">
+            @foreach (var day in Model.Forecast)
+            {
+                <div class="bg-slate-50 hover:bg-sky-50 transition p-3.5 rounded-xl border border-slate-100">
+                    <p class="text-xs font-bold text-slate-700">@day.Day</p>
+                    <p class="text-[10px] text-slate-400">@day.Date</p>
+                    <div class="my-3 text-xl text-sky-500">
+                        @if (day.Condition.Contains("Sunny") || day.Condition.Contains("Clear"))
+                        {
+                            <i class="fa-solid fa-sun text-amber-400"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-cloud-sun text-sky-400"></i>
+                        }
+                    </div>
+                    <p class="text-xs font-bold text-slate-800">@day.TempMax° <span class="text-slate-400 text-[10px]">/ @day.TempMin°</span></p>
+                    <p class="text-[10px] text-slate-500 mt-1">@day.Condition</p>
+                    <span class="inline-block mt-2 px-2 py-0.5 rounded text-[9px] font-semibold bg-sky-100 text-sky-700">Rain: @day.RainChance%</span>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

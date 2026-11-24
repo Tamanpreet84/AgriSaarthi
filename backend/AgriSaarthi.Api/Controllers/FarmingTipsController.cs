@@ -1,43 +1,54 @@
-using System;
-using System.Threading.Tasks;
-using AgriSaarthi.Api.Services;
+using System.Collections.Generic;
+using AgriSaarthi.Api.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace AgriSaarthi.Api.Controllers
 {
-    [Route("api/farming-tips")]
-    [ApiController]
     [Authorize]
-    public class FarmingTipsController : ControllerBase
+    [Route("farming-tips")]
+    public class FarmingTipsController : Controller
     {
-        private readonly IFarmingTipsService _farmingTipsService;
-        private readonly ILogger<FarmingTipsController> _logger;
-
-        public FarmingTipsController(IFarmingTipsService farmingTipsService, ILogger<FarmingTipsController> logger)
-        {
-            _farmingTipsService = farmingTipsService;
-            _logger = logger;
-        }
-
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string? crop, [FromQuery] string? category)
+        public IActionResult Index()
         {
-            try
+            var model = new FarmingTipsViewModel
             {
-                var tips = await _farmingTipsService.GetFarmingTipsAsync(crop, category);
-                if (tips == null || tips.Count == 0)
+                CurrentSeason = "Rabi Season (November - April)",
+                Tips = new List<TipItem>
                 {
-                    return NotFound(new { message = "No farming tips found for the given criteria." });
+                    new TipItem
+                    {
+                        Title = "Crown Root Initiation (CRI) Irrigation for Wheat",
+                        Category = "Water Management",
+                        Content = "First irrigation must be applied strictly at 20-25 days after sowing (CRI stage). Delaying this single watering can permanently reduce tiller count by up to 20%.",
+                        ActionBadge = "Crucial Stage"
+                    },
+                    new TipItem
+                    {
+                        Title = "Split Nitrogen Application Strategy",
+                        Category = "Fertilizer Practice",
+                        Content = "Never broadcast the entire Nitrogen dose at sowing. Apply 50% basal with DAP/MOP, 25% at first irrigation, and 25% at second irrigation before booting stage for maximum grain protein.",
+                        ActionBadge = "High ROI"
+                    },
+                    new TipItem
+                    {
+                        Title = "Soil Moisture Testing Without Sensors",
+                        Category = "Soil Health",
+                        Content = "Take soil from 6-8 inches depth and squeeze it in your hand. If it forms a firm ball without leaving muddy water, moisture is adequate. If it crumbles, schedule irrigation.",
+                        ActionBadge = "Practical Tip"
+                    },
+                    new TipItem
+                    {
+                        Title = "Integrated Pest Management (IPM) for Mustard Aphids",
+                        Category = "Pest Control",
+                        Content = "Install yellow sticky traps @ 10 traps per acre. Spray neem oil (1500 ppm) @ 5 ml/liter water at initial aphid clustering before economic threshold is breached.",
+                        ActionBadge = "Eco-Friendly"
+                    }
                 }
-                return Ok(tips);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching farming tips");
-                return StatusCode(500, new { error = "An unexpected error occurred while fetching farming tips." });
-            }
+            };
+
+            return View(model);
         }
     }
 }

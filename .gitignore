@@ -45,7 +45,9 @@ datasets/
 data/
 
 # IDE and OS files
-.vscode/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
 .idea/
 .DS_Store
 Thumbs.db

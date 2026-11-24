@@ -1,17 +1,18 @@
 using System.Text;
 using AgriSaarthi.Api.Data;
 using AgriSaarthi.Api.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
+// Add MVC Controllers with Razor Views and API Explorer
+builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
-// Database Configuration
+// Database Configuration (Microsoft SQL Server LocalDB)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AgriSaarthiDbContext>(options =>
@@ -26,14 +27,24 @@ builder.Services.AddScoped<IFarmingTipsService, FarmingTipsService>();
 builder.Services.AddHttpClient<IAiService, AiService>();
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 
-// Configure JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key is missing.");
+// Dual Authentication Configuration: Cookies for Web UI, JWT Bearer for REST APIs
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "A_Super_Secret_Key_For_AgriSaarthi_Development_Do_Not_Use_In_Prod";
+
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    options.SlidingExpiration = true;
+    options.Cookie.Name = "AgriSaarthi.Auth";
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -41,15 +52,15 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "AgriSaarthiApi",
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? "AgriSaarthiFrontend",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
 });
 
-// Configure CORS for frontend
+// Configure CORS
 var frontendUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
-                   ?? new[] { builder.Configuration["FrontendUrl"] ?? "http://localhost:5173" };
+                   ?? new[] { builder.Configuration["FrontendUrl"] ?? "http://localhost:5173", "http://localhost:5000" };
 
 builder.Services.AddCors(options =>
 {
@@ -62,11 +73,29 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Static Files & Web Assets
+app.UseStaticFiles();
+
+app.UseRouting();
+
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// MVC Route Pattern
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Web API Controllers (/api/...)
 app.MapControllers();
+
+// Automated EF Core Migrations and Seed Verification on Startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AgriSaarthiDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.Run();

@@ -1,0 +1,323 @@
+@model AgriSaarthi.Api.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Farmer Dashboard";
+}
+
+<div class="max-w-[1400px] mx-auto space-y-6">
+
+    <!-- Top Welcome Banner -->
+    <div class="bg-gradient-to-r from-[#1b4332] via-[#2d6a4f] to-[#40916c] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="absolute right-0 top-0 bottom-0 opacity-10 pointer-events-none flex items-center pr-10">
+            <i class="fa-solid fa-wheat-awn text-9xl"></i>
+        </div>
+        <div class="relative z-10 max-w-2xl">
+            <div class="inline-flex items-center space-x-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200 mb-3 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-[#52b788] animate-ping"></span>
+                <span>Live Agro-Advisory Engine Active</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Welcome back, @Model.FarmerName!</h1>
+            <p class="text-emerald-100 text-sm sm:text-base mt-2 leading-relaxed">
+                Precision agronomy, real-time weather telemetries, and smart crop advisory tailored for your farm in <span class="font-bold underline text-white">@Model.Location</span>.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-3">
+                <a asp-controller="Crop" asp-action="Recommend" class="px-4 py-2 bg-white text-[#1b4332] font-bold text-xs rounded-xl shadow hover:bg-emerald-50 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-seedling text-[#27ae60]"></i>
+                    <span>Run Crop Advisory</span>
+                </a>
+                <a href="/weather" class="px-4 py-2 bg-black/20 hover:bg-black/30 border border-white/20 text-white font-semibold text-xs rounded-xl transition flex items-center space-x-2">
+                    <i class="fa-solid fa-cloud-sun text-sky-300"></i>
+                    <span>View Weather Insights</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 Top Quick Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1: Crop Advisory -->
+        <a asp-controller="Crop" asp-action="Recommend" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Crop Advisory</p>
+                    <p class="text-lg font-bold text-[#1b4332] mt-1 group-hover:text-[#27ae60] transition">Find Best Crop</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Based on soil & climate</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#27ae60] flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Card 2: Weather Forecast -->
+        <a href="/weather" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Weather Forecast</p>
+                    <p class="text-lg font-bold text-sky-800 mt-1">@Model.Temperature°C • Sunny</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Localized farm advisory</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-cloud-sun"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Card 3: Mandi Rates -->
+        <a href="/market-prices" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Reference Prices</p>
+                    <p class="text-lg font-bold text-amber-800 mt-1">Live Mandi Rates</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Daily market updates</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Card 4: Disease Scan -->
+        <a href="/disease-detection" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Plant Health</p>
+                    <p class="text-lg font-bold text-[#1b4332] mt-1">Disease Scan</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Leaf pathology & cure</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-[#e8f3ee] text-[#145a32] flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-microscope"></i>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Main Grid Layout (2 cols on left, 1 col on right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column (Span 2) -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Row 1: Farm Overview & Latest Crop Advisory -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Farm Overview Card -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-50 text-[#27ae60] flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-tractor"></i>
+                            </span>
+                            <h3 class="font-bold text-slate-800 text-sm">Farm Overview</h3>
+                        </div>
+                        <a asp-controller="Home" asp-action="Profile" class="text-xs text-[#27ae60] font-semibold hover:underline">Edit</a>
+                    </div>
+
+                    <div class="mt-4 space-y-3 text-xs">
+                        <div class="flex justify-between py-1.5 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Farm Area:</span>
+                            <span class="font-bold text-slate-800">@Model.FarmSize Acres</span>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Soil Classification:</span>
+                            <span class="font-bold text-slate-800">@Model.SoilType</span>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Primary Irrigation:</span>
+                            <span class="font-bold text-slate-800">@Model.IrrigationType</span>
+                        </div>
+                        <div class="flex justify-between py-1.5">
+                            <span class="text-slate-500 font-medium">Primary Crop:</span>
+                            <span class="font-bold text-[#1b4332] bg-[#e8f3ee] px-2 py-0.5 rounded">@Model.PrimaryCrop</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Crop Advisory Card -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-50 text-[#27ae60] flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-seedling"></i>
+                            </span>
+                            <h3 class="font-bold text-slate-800 text-sm">Latest Advisory Result</h3>
+                        </div>
+                        <a asp-controller="Crop" asp-action="Recommend" class="text-xs text-[#27ae60] font-semibold hover:underline">New Run</a>
+                    </div>
+
+                    <div class="mt-4">
+                        @if (Model.LatestAdvisory != null)
+                        {
+                            <div class="bg-gradient-to-r from-emerald-50 to-[#e8f3ee] p-4 rounded-xl border border-emerald-100 mb-3">
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-[#27ae60]">Top Recommended Crop</p>
+                                <p class="text-xl font-extrabold text-[#1b4332] mt-0.5">@Model.LatestAdvisory.RecommendedCrop</p>
+                                <p class="text-xs text-slate-600 mt-1">Confidence: <span class="font-bold text-[#27ae60]">@((int)(Model.LatestAdvisory.ConfidenceScore * 100))%</span></p>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+                                <div class="bg-slate-50 p-2 rounded-lg">
+                                    <span class="text-slate-400 block font-medium">N-P-K</span>
+                                    <span class="font-bold text-slate-700">@Model.LatestAdvisory.Nitrogen-@Model.LatestAdvisory.Phosphorus-@Model.LatestAdvisory.Potassium</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded-lg">
+                                    <span class="text-slate-400 block font-medium">pH Level</span>
+                                    <span class="font-bold text-slate-700">@Model.LatestAdvisory.Ph</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded-lg">
+                                    <span class="text-slate-400 block font-medium">Rainfall</span>
+                                    <span class="font-bold text-slate-700">@Model.LatestAdvisory.Rainfall mm</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-6 text-slate-400">
+                                <i class="fa-solid fa-clipboard-list text-3xl mb-2 text-slate-300"></i>
+                                <p class="text-xs">No advisory run yet. Input your soil test values to get instant crop predictions!</p>
+                                <a asp-controller="Crop" asp-action="Recommend" class="mt-3 inline-block px-3 py-1.5 bg-[#27ae60] text-white rounded-lg text-xs font-semibold">Start Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Row 2: Disease Detection & Pest Sentry Alerts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Plant Health Quick Card -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-microscope text-[#27ae60]"></i>
+                            <h3 class="font-bold text-slate-800 text-sm">Plant Health Sentry</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Rabi Sentry</span>
+                    </div>
+
+                    <div class="mt-4 space-y-3">
+                        <div class="p-3 bg-slate-50 rounded-xl flex items-start space-x-3">
+                            <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 text-sm">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </span>
+                            <div class="text-xs">
+                                <p class="font-bold text-slate-800">Yellow Rust Warning</p>
+                                <p class="text-slate-500 mt-0.5">Spore alerts active for Jalandhar & Kapurthala belt. Spray Propiconazole if pustules observed.</p>
+                            </div>
+                        </div>
+                        <a href="/disease-detection" class="block w-full py-2 text-center text-xs font-semibold text-[#27ae60] bg-[#e8f3ee] hover:bg-[#d8ece1] rounded-xl transition">
+                            Open Plant Pathology Scanner
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Active Farming Tips -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-bell text-[#d97706]"></i>
+                            <h3 class="font-bold text-slate-800 text-sm">Recent Agro Alerts</h3>
+                        </div>
+                        <span class="text-[10px] text-slate-400">Live Feeds</span>
+                    </div>
+
+                    <div class="mt-3 space-y-2.5">
+                        @foreach (var alert in Model.ActiveAlerts.Take(2))
+                        {
+                            <div class="p-2.5 rounded-xl border border-slate-100 text-xs">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-slate-800">@alert.Title</span>
+                                    <span class="text-[10px] text-slate-400">@alert.TimeAgo</span>
+                                </div>
+                                <p class="text-slate-500 text-[11px] mt-1">@alert.Description</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right Column (Span 1) -->
+        <div class="space-y-6">
+
+            <!-- Live Weather Widget -->
+            <div class="bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-sky-200">Hyperlocal Weather</span>
+                        <h4 class="text-lg font-bold">@Model.Location</h4>
+                    </div>
+                    <i class="fa-solid fa-sun text-3xl text-amber-300 animate-spin-slow"></i>
+                </div>
+
+                <div class="mt-4 flex items-baseline space-x-2">
+                    <span class="text-4xl font-extrabold tracking-tight">@Model.Temperature°</span>
+                    <span class="text-sm font-medium text-sky-100">C • @Model.WeatherCondition</span>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+                    <div class="bg-white/10 rounded-xl p-2.5 backdrop-blur-sm">
+                        <span class="text-sky-200 block text-[10px]">Humidity</span>
+                        <span class="font-bold text-sm">@Model.Humidity%</span>
+                    </div>
+                    <div class="bg-white/10 rounded-xl p-2.5 backdrop-blur-sm">
+                        <span class="text-sky-200 block text-[10px]">Wind Speed</span>
+                        <span class="font-bold text-sm">@Model.WindSpeed km/h</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 bg-white/15 rounded-xl text-xs backdrop-blur-sm">
+                    <p class="font-semibold text-amber-200 text-[11px] mb-0.5"><i class="fa-solid fa-lightbulb mr-1"></i> Agronomic Advisory:</p>
+                    <p class="text-sky-100 text-[11px] leading-relaxed">@Model.WeatherTip</p>
+                </div>
+
+                <div class="mt-3 text-right">
+                    <a href="/weather" class="text-xs font-bold text-white hover:underline">7-Day Forecast & Details →</a>
+                </div>
+            </div>
+
+            <!-- Mandi Reference Prices Preview -->
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-indian-rupee-sign text-amber-600"></i>
+                        <h3 class="font-bold text-slate-800 text-sm">Mandi Rates (₹/Qtl)</h3>
+                    </div>
+                    <a href="/market-prices" class="text-xs text-[#27ae60] font-semibold hover:underline">View All</a>
+                </div>
+
+                <div class="mt-3 divide-y divide-slate-100">
+                    @foreach (var price in Model.RecentMarketPrices)
+                    {
+                        <div class="py-2.5 flex items-center justify-between text-xs">
+                            <div>
+                                <p class="font-bold text-slate-800">@price.Commodity</p>
+                                <p class="text-[10px] text-slate-400">@price.Market, @price.State</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-extrabold text-slate-900">₹@price.ModalPrice</span>
+                                @if (price.Trend == "up")
+                                {
+                                    <span class="block text-[10px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> Rising</span>
+                                }
+                                else if (price.Trend == "down")
+                                {
+                                    <span class="block text-[10px] text-red-500 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> Falling</span>
+                                }
+                                else
+                                {
+                                    <span class="block text-[10px] text-slate-400 font-semibold">• Stable</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
