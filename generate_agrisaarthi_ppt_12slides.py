@@ -34,8 +34,9 @@ IMG_LPU = os.path.join(ASSETS_DIR, r"word\media\image1.png")
 IMG_ARCH = os.path.join(ASSETS_DIR, r"word\media\image2.png")
 IMG_ML_FLOW = os.path.join(ASSETS_DIR, r"word\media\image3.png")
 IMG_SECURITY = os.path.join(ASSETS_DIR, r"word\media\image4.png")
-IMG_DASHBOARD_LIVE = os.path.join(ASSETS_DIR, r"live_dashboard_ss.jpg")
-IMG_DASHBOARD = os.path.join(ASSETS_DIR, r"dashboard_ss.png")
+IMG_DASHBOARD_EN = os.path.join(ASSETS_DIR, r"english_dashboard_ss.png")
+IMG_DASHBOARD_LIVE = os.path.join(ASSETS_DIR, r"english_dashboard_ss.png")
+IMG_DASHBOARD = os.path.join(ASSETS_DIR, r"english_dashboard_ss.png")
 IMG_REGISTER = os.path.join(ASSETS_DIR, r"register_ss.png")
 
 def set_slide_background(slide):
@@ -155,18 +156,21 @@ tb_emb = s1.shapes.add_textbox(Inches(1.5), Inches(2.5), Inches(1.5), Inches(0.9
 tf_emb = tb_emb.text_frame
 tf_emb.word_wrap = True
 pe1 = tf_emb.paragraphs[0]
-pe1.text = "AGRI"
-pe1.font.name = "Segoe UI"
-pe1.font.size = Pt(14)
-pe1.font.bold = True
-pe1.font.color.rgb = C_EMERALD
+r_pe1 = pe1.add_run()
+r_pe1.text = "AGRI"
+r_pe1.font.name = "Segoe UI"
+r_pe1.font.size = Pt(14)
+r_pe1.font.bold = True
+r_pe1.font.color.rgb = C_EMERALD
 pe1.alignment = PP_ALIGN.CENTER
+
 pe2 = tf_emb.add_paragraph()
-pe2.text = "SAARTHI"
-pe2.font.name = "Segoe UI"
-pe2.font.size = Pt(11)
-pe2.font.bold = True
-pe2.font.color.rgb = C_GOLD
+r_pe2 = pe2.add_run()
+r_pe2.text = "SAARTHI"
+r_pe2.font.name = "Segoe UI"
+r_pe2.font.size = Pt(11)
+r_pe2.font.bold = True
+r_pe2.font.color.rgb = C_GOLD
 pe2.alignment = PP_ALIGN.CENTER
 
 # Hero Title & Typography
@@ -175,33 +179,40 @@ tf_hero = tb_hero_text.text_frame
 tf_hero.word_wrap = True
 
 p_h1 = tf_hero.paragraphs[0]
-p_h1.text = "AGRISAARTHI"
-p_h1.font.name = "Segoe UI"
-p_h1.font.size = Pt(28)
-p_h1.font.bold = True
-p_h1.font.color.rgb = C_WHITE
+r_h1 = p_h1.add_run()
+r_h1.text = "AGRISAARTHI"
+r_h1.font.name = "Segoe UI"
+r_h1.font.size = Pt(28)
+r_h1.font.bold = True
+r_h1.font.color.rgb = C_WHITE
 p_h1.alignment = PP_ALIGN.CENTER
 
 p_h2 = tf_hero.add_paragraph()
-p_h2.text = "AI-Powered Precision Agriculture\n& Crop Advisory System"
-p_h2.font.name = "Segoe UI"
-p_h2.font.size = Pt(13)
-p_h2.font.color.rgb = C_EMERALD
+p_h2.space_before = Pt(6)
+r_h2 = p_h2.add_run()
+r_h2.text = "AI-Powered Precision Agriculture\n& Crop Advisory System"
+r_h2.font.name = "Segoe UI"
+r_h2.font.size = Pt(13)
+r_h2.font.color.rgb = C_EMERALD
 p_h2.alignment = PP_ALIGN.CENTER
 
 p_h3 = tf_hero.add_paragraph()
-p_h3.text = "\nKnow More · Grow More"
-p_h3.font.name = "Segoe UI"
-p_h3.font.size = Pt(12)
-p_h3.font.bold = True
-p_h3.font.color.rgb = C_GOLD
+p_h3.space_before = Pt(14)
+r_h3 = p_h3.add_run()
+r_h3.text = "Know More · Grow More"
+r_h3.font.name = "Segoe UI"
+r_h3.font.size = Pt(13)
+r_h3.font.bold = True
+r_h3.font.color.rgb = C_GOLD
 p_h3.alignment = PP_ALIGN.CENTER
 
 p_h4 = tf_hero.add_paragraph()
-p_h4.text = "\nASP.NET Core 10 · SQL Server · Python FastAPI · React 19"
-p_h4.font.name = "Segoe UI"
-p_h4.font.size = Pt(9.5)
-p_h4.font.color.rgb = C_WHITE
+p_h4.space_before = Pt(14)
+r_h4 = p_h4.add_run()
+r_h4.text = "ASP.NET Core 10 · SQL Server · Python FastAPI · React 19"
+r_h4.font.name = "Segoe UI"
+r_h4.font.size = Pt(10)
+r_h4.font.color.rgb = C_WHITE
 p_h4.alignment = PP_ALIGN.CENTER
 
 # Right Column: Header & Project Team Members (ONLY NAME & REG NO - NO ROLES!)
@@ -682,11 +693,11 @@ p_ui_h.font.size = Pt(11.5)
 p_ui_h.font.bold = True
 p_ui_h.font.color.rgb = C_SECONDARY
 
-add_bullet_point(tf_ui, "4 Top Telemetry Cards:", "One-tap direct access to Crop Advisory, Weather Forecast, Mandi Rates, and Leaf Pathology Scanner.", 10)
-add_bullet_point(tf_ui, "Farm Profile Overview:", "Live display of farm acreage (6 Acres), sandy soil classification, tubewell irrigation, and primary cotton crop.", 10)
-add_bullet_point(tf_ui, "Latest Advisory Card:", "Displays top recommended crop (Rice, 64% confidence) with real-time N-P-K, pH, and rainfall readouts.", 10)
-add_bullet_point(tf_ui, "Hyperlocal Weather:", "Real-time temperature, humidity, wind telemetry, and agronomic irrigation tips.", 10)
-add_bullet_point(tf_ui, "Rabi Sentry Alert:", "Instant alert box highlighting regional Yellow Rust spore warnings.", 10)
+add_bullet_point(tf_ui, "4 Top Telemetry Cards:", "Instant 1-click navigation to Crop Advisory, Local Weather, Mandi Prices, and Plant Disease Scanner.", 10)
+add_bullet_point(tf_ui, "Farm Profile Overview:", "Live telemetry showing farm acreage (4.5 Acres), alluvial loam soil, canal/tube well irrigation, and primary wheat & rice crop.", 10)
+add_bullet_point(tf_ui, "Latest Advisory Telemetry:", "Machine learning recommendation with soil N-P-K (90-200-48), pH level (6.5), and rainfall telemetry (255 mm).", 10)
+add_bullet_point(tf_ui, "Hyperlocal Weather Widget:", "Real-time temperature (24.5°C), humidity (58%), wind speed (11.2 km/h), and agronomist morning inspection tips.", 10)
+add_bullet_point(tf_ui, "Plant Health & Mandi Rates:", "Yellow Rust spore alerts for Doaba belt alongside live APMC modal prices (Cotton Kapas ₹7,190/Qtl, Maize ₹2,143/Qtl).", 10)
 
 # ==============================================================================
 # SLIDE 9: SECURITY ARCHITECTURE & DUAL AUTHENTICATION
@@ -984,10 +995,16 @@ pth6.alignment = PP_ALIGN.CENTER
 # ==============================================================================
 out_path_1 = r"C:\Users\taman\OneDrive\Desktop\agrisaarthi\AgriSaarthi_Presentation.pptx"
 out_path_2 = r"C:\Users\taman\OneDrive\Desktop\New folder (2)\AgriSaarthi_Presentation.pptx"
+out_path_3 = r"C:\Users\taman\OneDrive\Desktop\agrisaarthi\AgriSaarthi_Final_Presentation.pptx"
+out_path_4 = r"C:\Users\taman\OneDrive\Desktop\New folder (2)\AgriSaarthi_Final_Presentation.pptx"
 
 prs.save(out_path_1)
 prs.save(out_path_2)
+prs.save(out_path_3)
+prs.save(out_path_4)
 
 print(f"SUCCESS: AgriSaarthi presentation regenerated with {len(prs.slides)} slides!")
 print(f"Saved: {out_path_1}")
 print(f"Saved: {out_path_2}")
+print(f"Saved: {out_path_3}")
+print(f"Saved: {out_path_4}")

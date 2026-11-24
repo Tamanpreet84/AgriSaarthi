@@ -30,7 +30,7 @@ namespace AgriSaarthi.Api.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
@@ -58,7 +58,7 @@ namespace AgriSaarthi.Api.Controllers
 
             var model = new DashboardViewModel
             {
-                FarmerName = farmer?.FullName ?? "Taman Preet Singh",
+                FarmerName = "Taman Preet Singh",
                 Email = farmer?.Email ?? "tamanpreet0007@gmail.com",
                 PhoneNumber = farmer?.PhoneNumber ?? "+91 9896558903",
                 Location = farmer?.Profile?.Location ?? "Phagwara, Punjab",
