@@ -7,7 +7,7 @@ from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
 
 # ==============================================================================
-# AGRISAARTHI 12-SLIDE COMPREHENSIVE PRESENTATION GENERATOR
+# AGRISAARTHI 12-SLIDE CLEAN & EXECUTIVE PRESENTATION GENERATOR
 # ==============================================================================
 
 prs = Presentation()
@@ -15,8 +15,8 @@ prs.slide_width = Inches(13.333)
 prs.slide_height = Inches(7.5)
 blank_slide_layout = prs.slide_layouts[6]
 
-# Theme Colors
-C_BG = RGBColor(248, 250, 252)          # #F8FAFC
+# Theme Colors (Deep Forest Agriculture Palette)
+C_BG = RGBColor(248, 250, 252)          # #F8FAFC - Clean off-white
 C_PRIMARY = RGBColor(27, 67, 50)        # #1B4332 - Deep Forest Green
 C_SECONDARY = RGBColor(45, 106, 79)     # #2D6A4F - Medium Forest Green
 C_ACCENT = RGBColor(64, 145, 108)       # #40916C - Foliage Green
@@ -25,14 +25,12 @@ C_GOLD = RGBColor(217, 119, 6)          # #D97706 - Amber/Gold
 C_DARK = RGBColor(30, 41, 59)           # #1E293B - Slate Dark
 C_MUTED = RGBColor(100, 116, 139)       # #64748B - Slate Muted
 C_WHITE = RGBColor(255, 255, 255)       # Pure White
-C_CARD_BG = RGBColor(255, 255, 255)
-C_BORDER = RGBColor(226, 232, 240)      # Light border
-C_LIGHT_GREEN = RGBColor(236, 253, 245) # Soft Green fill
-C_LIGHT_BLUE = RGBColor(239, 246, 255)  # Soft Blue fill
+C_CARD_BG = RGBColor(255, 255, 255)     # Card Background
+C_BORDER = RGBColor(226, 232, 240)      # Border
+C_LIGHT_GREEN = RGBColor(236, 253, 245) # Soft Green
 
 ASSETS_DIR = r"C:\Users\taman\OneDrive\Desktop\agrisaarthi\ppt_assets"
 IMG_LPU = os.path.join(ASSETS_DIR, r"word\media\image1.png")
-IMG_LOGO = os.path.join(ASSETS_DIR, r"logo_brand.png")
 IMG_ARCH = os.path.join(ASSETS_DIR, r"word\media\image2.png")
 IMG_ML_FLOW = os.path.join(ASSETS_DIR, r"word\media\image3.png")
 IMG_SECURITY = os.path.join(ASSETS_DIR, r"word\media\image4.png")
@@ -47,7 +45,8 @@ def set_slide_background(slide):
     bg_shape.line.fill.background()
     return bg_shape
 
-def add_header(slide, title_text, category_text="AGRISAARTHI · 12-SLIDE CAPSTONE PRESENTATION", slide_num=None):
+def add_header(slide, title_text, category_text="AGRISAARTHI · CAPSTONE PROJECT PRESENTATION", slide_num=None):
+    # Pure Clean Header Bar - NO white box or intrusive images
     header_box = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(1.15))
     header_box.fill.solid()
     header_box.fill.fore_color.rgb = C_PRIMARY
@@ -58,7 +57,7 @@ def add_header(slide, title_text, category_text="AGRISAARTHI · 12-SLIDE CAPSTON
     accent_line.fill.fore_color.rgb = C_GOLD
     accent_line.line.fill.background()
 
-    tb = slide.shapes.add_textbox(Inches(0.8), Inches(0.12), Inches(10.5), Inches(0.95))
+    tb = slide.shapes.add_textbox(Inches(0.8), Inches(0.12), Inches(11.5), Inches(0.95))
     tf = tb.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
@@ -76,12 +75,6 @@ def add_header(slide, title_text, category_text="AGRISAARTHI · 12-SLIDE CAPSTON
     p_title.font.size = Pt(21)
     p_title.font.bold = True
     p_title.font.color.rgb = C_WHITE
-
-    if os.path.exists(IMG_LOGO):
-        try:
-            slide.shapes.add_picture(IMG_LOGO, Inches(11.8), Inches(0.12), width=Inches(1.0))
-        except:
-            pass
 
     if slide_num:
         tb_num = slide.shapes.add_textbox(Inches(12.0), Inches(7.1), Inches(1.0), Inches(0.35))
@@ -104,7 +97,7 @@ def add_card(slide, left, top, width, height, bg_color=C_CARD_BG, border_color=C
         card.line.fill.background()
     return card
 
-def add_bullet_point(text_frame, bold_prefix, text_content, font_size=12, is_first=False):
+def add_bullet_point(text_frame, bold_prefix, text_content, font_size=11, is_first=False):
     p = text_frame.paragraphs[0] if is_first else text_frame.add_paragraph()
     p.space_after = Pt(6)
     p.space_before = Pt(2)
@@ -131,7 +124,7 @@ def add_bullet_point(text_frame, bold_prefix, text_content, font_size=12, is_fir
     run_text.font.color.rgb = C_DARK
 
 # ==============================================================================
-# SLIDE 1: TITLE SLIDE & CREDENTIALS (NO ROLES - NAMES & REG NOS ONLY)
+# SLIDE 1: CLEAN TITLE SLIDE (NO WHITE BOX IN GREEN PART, NAMES & REG NOS ONLY)
 # ==============================================================================
 s1 = prs.slides.add_slide(blank_slide_layout)
 set_slide_background(s1)
@@ -147,14 +140,37 @@ gold_stripe.fill.solid()
 gold_stripe.fill.fore_color.rgb = C_GOLD
 gold_stripe.line.fill.background()
 
-# LPU Logo & Branding in Hero
+# LPU Transparent Logo at top
 if os.path.exists(IMG_LPU):
-    s1.shapes.add_picture(IMG_LPU, Inches(0.8), Inches(0.6), width=Inches(2.9))
+    s1.shapes.add_picture(IMG_LPU, Inches(0.8), Inches(0.65), width=Inches(2.9))
 
-if os.path.exists(IMG_LOGO):
-    s1.shapes.add_picture(IMG_LOGO, Inches(1.4), Inches(2.2), width=Inches(1.7))
+# Clean Vector Emblem Badge (NO WHITE SQUARE BOX!)
+emblem_outer = s1.shapes.add_shape(MSO_SHAPE.OVAL, Inches(1.5), Inches(2.2), Inches(1.5), Inches(1.5))
+emblem_outer.fill.solid()
+emblem_outer.fill.fore_color.rgb = C_SECONDARY
+emblem_outer.line.color.rgb = C_GOLD
+emblem_outer.line.width = Pt(2.5)
 
-tb_hero_text = s1.shapes.add_textbox(Inches(0.4), Inches(4.1), Inches(3.7), Inches(3.0))
+tb_emb = s1.shapes.add_textbox(Inches(1.5), Inches(2.5), Inches(1.5), Inches(0.9))
+tf_emb = tb_emb.text_frame
+tf_emb.word_wrap = True
+pe1 = tf_emb.paragraphs[0]
+pe1.text = "AGRI"
+pe1.font.name = "Segoe UI"
+pe1.font.size = Pt(14)
+pe1.font.bold = True
+pe1.font.color.rgb = C_EMERALD
+pe1.alignment = PP_ALIGN.CENTER
+pe2 = tf_emb.add_paragraph()
+pe2.text = "SAARTHI"
+pe2.font.name = "Segoe UI"
+pe2.font.size = Pt(11)
+pe2.font.bold = True
+pe2.font.color.rgb = C_GOLD
+pe2.alignment = PP_ALIGN.CENTER
+
+# Hero Title & Typography
+tb_hero_text = s1.shapes.add_textbox(Inches(0.4), Inches(4.0), Inches(3.7), Inches(3.2))
 tf_hero = tb_hero_text.text_frame
 tf_hero.word_wrap = True
 
@@ -188,8 +204,8 @@ p_h4.font.size = Pt(9.5)
 p_h4.font.color.rgb = C_WHITE
 p_h4.alignment = PP_ALIGN.CENTER
 
-# Right Column: Title Header & Team Members (STRICTLY NAMES & REGISTRATION NUMBERS ONLY)
-tb_main_title = s1.shapes.add_textbox(Inches(5.0), Inches(0.55), Inches(7.8), Inches(2.2))
+# Right Column: Header & Project Team Members (ONLY NAME & REG NO - NO ROLES!)
+tb_main_title = s1.shapes.add_textbox(Inches(5.0), Inches(0.55), Inches(7.8), Inches(2.1))
 tf_title = tb_main_title.text_frame
 tf_title.word_wrap = True
 
@@ -215,9 +231,9 @@ p_tag.font.bold = True
 p_tag.font.color.rgb = C_GOLD
 
 # Card Container for Team
-add_card(s1, Inches(5.0), Inches(2.8), Inches(7.8), Inches(4.3), bg_color=C_CARD_BG, border_color=C_BORDER)
+add_card(s1, Inches(5.0), Inches(2.75), Inches(7.8), Inches(4.35), bg_color=C_CARD_BG, border_color=C_BORDER)
 
-tb_team_hdr = s1.shapes.add_textbox(Inches(5.3), Inches(2.95), Inches(7.2), Inches(0.45))
+tb_team_hdr = s1.shapes.add_textbox(Inches(5.3), Inches(2.9), Inches(7.2), Inches(0.45))
 p_thdr = tb_team_hdr.text_frame.paragraphs[0]
 p_thdr.text = "CAPSTONE PROJECT TEAM MEMBERS"
 p_thdr.font.name = "Segoe UI"
@@ -234,19 +250,19 @@ members = [
 
 for idx, (m_name, m_reg) in enumerate(members):
     c_left = Inches(5.2 + idx * 2.45)
-    mem_box = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left, Inches(3.55), Inches(2.35), Inches(1.9))
+    mem_box = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, c_left, Inches(3.5), Inches(2.35), Inches(2.0))
     mem_box.fill.solid()
     mem_box.fill.fore_color.rgb = C_LIGHT_GREEN if idx == 0 else C_BG
     mem_box.line.color.rgb = C_ACCENT if idx == 0 else C_BORDER
     mem_box.line.width = Pt(1.5)
 
-    # Avatar circle icon placeholder
-    circle_ico = s1.shapes.add_shape(MSO_SHAPE.OVAL, c_left + Inches(0.85), Inches(3.75), Inches(0.65), Inches(0.65))
+    # Initial circle badge
+    circle_ico = s1.shapes.add_shape(MSO_SHAPE.OVAL, c_left + Inches(0.85), Inches(3.7), Inches(0.65), Inches(0.65))
     circle_ico.fill.solid()
     circle_ico.fill.fore_color.rgb = C_PRIMARY if idx == 0 else C_SECONDARY
     circle_ico.line.fill.background()
 
-    tb_ci = s1.shapes.add_textbox(c_left + Inches(0.85), Inches(3.8), Inches(0.65), Inches(0.55))
+    tb_ci = s1.shapes.add_textbox(c_left + Inches(0.85), Inches(3.75), Inches(0.65), Inches(0.55))
     p_ci = tb_ci.text_frame.paragraphs[0]
     p_ci.text = m_name[0]
     p_ci.font.name = "Segoe UI"
@@ -255,7 +271,7 @@ for idx, (m_name, m_reg) in enumerate(members):
     p_ci.font.color.rgb = C_WHITE
     p_ci.alignment = PP_ALIGN.CENTER
 
-    tb_m = s1.shapes.add_textbox(c_left + Inches(0.1), Inches(4.5), Inches(2.15), Inches(0.9))
+    tb_m = s1.shapes.add_textbox(c_left + Inches(0.1), Inches(4.45), Inches(2.15), Inches(0.95))
     tf_m = tb_m.text_frame
     tf_m.word_wrap = True
     
@@ -276,7 +292,7 @@ for idx, (m_name, m_reg) in enumerate(members):
     pm2.alignment = PP_ALIGN.CENTER
 
 # Project Guide & Institutional Details at Bottom of Slide 1
-tb_guide = s1.shapes.add_textbox(Inches(5.3), Inches(5.65), Inches(7.2), Inches(1.3))
+tb_guide = s1.shapes.add_textbox(Inches(5.3), Inches(5.75), Inches(7.2), Inches(1.2))
 tf_g = tb_guide.text_frame
 tf_g.word_wrap = True
 
@@ -902,10 +918,10 @@ add_bullet_point(tf_del, "Microsoft SQL Server LocalDB:", "Production database h
 add_bullet_point(tf_del, "Complete Multilingual Support:", "Instant one-click switching across English, Hindi (हिंदी), and Punjabi (ਪੰਜਾਬੀ), with custom Dark & Light mode.", 10.5)
 add_bullet_point(tf_del, "One-Click Launcher Integration:", "Unified batch launcher (`run_agrisaarthi.bat`) starting SQL Server, AI microservice, frontend, and backend in 1 click.", 10.5)
 
-# Right Column: Big Thank You Hero Card
+# Right Column: Big Thank You Hero Card (Clean Deep Forest Green with Gold Accent)
 add_card(s12, Inches(6.75), Inches(1.45), Inches(5.75), Inches(5.5), bg_color=C_PRIMARY, border_color=C_GOLD)
 
-tb_thx = s12.shapes.add_textbox(Inches(7.0), Inches(1.7), Inches(5.25), Inches(5.0))
+tb_thx = s12.shapes.add_textbox(Inches(7.0), Inches(1.65), Inches(5.25), Inches(5.1))
 tf_thx = tb_thx.text_frame
 tf_thx.word_wrap = True
 
@@ -951,7 +967,7 @@ pth4.alignment = PP_ALIGN.CENTER
 pth5 = tf_thx.add_paragraph()
 pth5.text = "• Taman Preet Singh  (Reg. No: 12309438)\n• Utkarsh  (Reg. No: 12308727)\n• Mansi Verma  (Reg. No: 12416455)\n"
 pth5.font.name = "Segoe UI"
-pth5.font.size = Pt(10.5)
+pth5.font.size = Pt(11)
 pth5.font.bold = True
 pth5.font.color.rgb = C_WHITE
 pth5.alignment = PP_ALIGN.CENTER
@@ -972,6 +988,6 @@ out_path_2 = r"C:\Users\taman\OneDrive\Desktop\New folder (2)\AgriSaarthi_Presen
 prs.save(out_path_1)
 prs.save(out_path_2)
 
-print(f"SUCCESS: AgriSaarthi presentation saved with {len(prs.slides)} slides!")
-print(f"File 1: {out_path_1}")
-print(f"File 2: {out_path_2}")
+print(f"SUCCESS: AgriSaarthi presentation regenerated with {len(prs.slides)} slides!")
+print(f"Saved: {out_path_1}")
+print(f"Saved: {out_path_2}")
