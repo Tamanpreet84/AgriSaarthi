@@ -9,7 +9,7 @@ namespace AgriSaarthi.Api.Controllers
 {
     [Route("api/market-prices")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class MarketPricesController : ControllerBase
     {
         private readonly IMarketPriceService _marketPriceService;

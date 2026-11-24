@@ -32,8 +32,24 @@ var jwtKey = builder.Configuration["Jwt:Key"] ?? "A_Super_Secret_Key_For_AgriSaa
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultScheme = "JWT_OR_COOKIE";
+    options.DefaultChallengeScheme = "JWT_OR_COOKIE";
+})
+.AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
+{
+    options.ForwardDefaultSelector = context =>
+    {
+        var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            return JwtBearerDefaults.AuthenticationScheme;
+        }
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            return JwtBearerDefaults.AuthenticationScheme;
+        }
+        return CookieAuthenticationDefaults.AuthenticationScheme;
+    };
 })
 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
@@ -43,6 +59,16 @@ builder.Services.AddAuthentication(options =>
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.SlidingExpiration = true;
     options.Cookie.Name = "AgriSaarthi.Auth";
+    options.Events.OnRedirectToLogin = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        }
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
 })
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {

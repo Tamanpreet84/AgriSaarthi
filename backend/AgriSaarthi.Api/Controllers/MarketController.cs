@@ -23,6 +23,7 @@ namespace AgriSaarthi.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string? state = "All", string? commodity = "All", string? search = "")
         {
             // Auto-seed if database table is empty
@@ -65,6 +66,7 @@ namespace AgriSaarthi.Api.Controllers
         }
 
         [HttpPost("refresh")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RefreshPrices()
         {
