@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -27,12 +28,73 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
-        body { font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', sans-serif; background-color: #f3f7f5; }
+        body { font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', sans-serif; background-color: #f3f7f5; transition: background-color 0.2s ease, color 0.2s ease; }
         .sidebar-active {
             background-color: #e8f3ee;
             color: #1b4332;
             font-weight: 600;
             border-left: 4px solid #2d6a4f;
+        }
+
+        /* High-Quality Dark Mode System Styles */
+        html.dark body {
+            background-color: #0b1320 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark aside,
+        html.dark header,
+        html.dark .bg-white,
+        html.dark .mobile-nav-bar {
+            background-color: #151f30 !important;
+            border-color: #243447 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .text-slate-800,
+        html.dark .text-slate-900,
+        html.dark .text-slate-700 {
+            color: #f8fafc !important;
+        }
+        html.dark .text-slate-600,
+        html.dark .text-slate-500,
+        html.dark .text-slate-400 {
+            color: #94a3b8 !important;
+        }
+        html.dark .bg-slate-50,
+        html.dark .bg-slate-100 {
+            background-color: #1a273b !important;
+            border-color: #2d3f58 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark .border-slate-100,
+        html.dark .border-slate-200,
+        html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #243447 !important;
+        }
+        html.dark .bg-brand-soft {
+            background-color: #163826 !important;
+            color: #52b788 !important;
+        }
+        html.dark .sidebar-active {
+            background-color: #183d29 !important;
+            color: #52b788 !important;
+            border-left: 4px solid #52b788 !important;
+        }
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #182436 !important;
+            color: #f8fafc !important;
+            border-color: #334760 !important;
+        }
+        html.dark table thead th {
+            background-color: #1a273b !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark table tbody tr {
+            border-color: #243447 !important;
+        }
+        html.dark table tbody tr:hover {
+            background-color: #1b283d !important;
         }
     </style>
 </head>
@@ -41,7 +103,7 @@
     <div class="flex h-screen overflow-hidden">
         
         <!-- Desktop Sidebar -->
-        <aside class="hidden lg:flex w-72 flex-col bg-white border-r border-slate-200 z-30">
+        <aside class="hidden lg:flex w-72 flex-col bg-white border-r border-slate-200 z-30 transition-colors">
             <!-- Brand Logo Header -->
             <div class="p-5 border-b border-slate-100 flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-brand-soft flex items-center justify-center text-brand-dark shadow-sm">
@@ -108,15 +170,15 @@
                 </a>
             </nav>
 
-            <!-- User Footer Profile Card -->
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-                <div class="flex items-center space-x-3 min-w-0">
-                    <div class="w-9 h-9 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shadow">
+            <!-- Bottom User Details & Logout -->
+            <div class="p-4 border-t border-slate-100 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-emerald-100 text-brand-dark flex items-center justify-center font-bold text-sm">
                         @(User.Identity?.Name?.Substring(0, 1).ToUpper() ?? "F")
                     </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-bold text-slate-800 truncate">@(User.Identity?.Name ?? "Taman Preet Singh")</p>
-                        <p class="text-[10px] text-slate-500 truncate" data-i18n="lbl_registered_farmer">Registered Farmer</p>
+                    <div class="text-xs truncate max-w-[140px]">
+                        <p class="font-bold text-slate-800 truncate">@(User.Identity?.Name ?? "Farmer")</p>
+                        <p class="text-[10px] text-slate-400" data-i18n="lbl_registered_farmer">Registered Farmer</p>
                     </div>
                 </div>
                 <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
@@ -132,7 +194,7 @@
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             
             <!-- Top Navbar -->
-            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sm:px-6 z-20">
+            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sm:px-6 z-20 transition-colors">
                 <div class="flex items-center space-x-3">
                     <button class="lg:hidden text-slate-600 hover:text-brand-dark p-2" onclick="document.querySelector('aside').classList.toggle('hidden')">
                         <i class="fa-solid fa-bars text-lg"></i>
@@ -143,16 +205,24 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="flex items-center space-x-2 sm:space-x-3">
                     <!-- Status Badge -->
-                    <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
                         <span data-i18n="status_db_connected">SQL Server Connected</span>
                     </span>
 
-                    <!-- Fully Functional Multilingual Language Switcher -->
+                    <!-- Dark Mode / Light Mode Toggle Button (Default: Light Mode) -->
+                    <button type="button" onclick="toggleTheme()" id="btn-theme-toggle" 
+                            class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition" 
+                            title="Toggle Light / Dark Mode">
+                        <i id="theme-icon" class="fa-solid fa-moon text-amber-500 text-sm"></i>
+                        <span id="theme-label" class="hidden sm:inline">Dark</span>
+                    </button>
+
+                    <!-- Multilingual Language Switcher (Default: English) -->
                     <div class="flex items-center bg-slate-100 rounded-xl p-1 text-xs font-bold text-slate-600 border border-slate-200">
-                        <button type="button" onclick="setLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 rounded-lg transition shadow-sm bg-white text-brand-dark">EN</button>
+                        <button type="button" onclick="setLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 rounded-lg transition font-bold shadow-sm bg-white text-brand-dark">EN</button>
                         <button type="button" onclick="setLanguage('hi')" id="btn-lang-hi" class="px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark">हिंदी</button>
                         <button type="button" onclick="setLanguage('pa')" id="btn-lang-pa" class="px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark">ਪੰਜਾਬੀ</button>
                     </div>
@@ -179,7 +249,7 @@
             </main>
 
             <!-- Mobile Bottom Navbar -->
-            <div class="lg:hidden bg-white border-t border-slate-200 flex justify-around items-center h-16 px-2 z-40">
+            <div class="lg:hidden mobile-nav-bar bg-white border-t border-slate-200 flex justify-around items-center h-16 px-2 z-40 transition-colors">
                 <a asp-controller="Home" asp-action="Dashboard" class="flex flex-col items-center justify-center text-brand-dark">
                     <i class="fa-solid fa-house text-base"></i>
                     <span class="text-[10px] mt-1 font-medium" data-i18n="m_home">Home</span>
@@ -206,7 +276,7 @@
 
     </div>
 
-    <!-- Multilingual Translation Engine Script -->
+    <!-- Complete Multilingual Dictionary & Theme Engine Script -->
     <script>
         const translations = {
             en: {
@@ -228,7 +298,91 @@
                 m_advisory: "Advisory",
                 m_weather: "Weather",
                 m_prices: "Prices",
-                m_profile: "Profile"
+                m_profile: "Profile",
+
+                // Dashboard Welcome Banner
+                advisory_active: "Live Agro-Advisory Engine Active",
+                welcome_back: "Welcome back,",
+                banner_desc: "Precision agronomy, real-time weather telemetries, and smart crop advisory tailored for your farm in",
+                btn_run_advisory: "Run Crop Advisory",
+                btn_weather_insights: "View Weather Insights",
+
+                // 4 Top Cards
+                card_crop_sub: "Crop Advisory",
+                card_crop_title: "Find Best Crop",
+                card_crop_desc: "Based on soil & climate",
+                card_weather_sub: "Weather Forecast",
+                card_weather_desc: "Localized farm advisory",
+                card_market_sub: "Reference Prices",
+                card_market_title: "Live Mandi Rates",
+                card_market_desc: "Daily market updates",
+                card_disease_sub: "Plant Health",
+                card_disease_title: "Disease Scan",
+                card_disease_desc: "Leaf pathology & cure",
+
+                // Farm Overview Card
+                farm_overview_title: "Farm Overview",
+                farm_edit: "Edit",
+                farm_area_lbl: "Farm Area:",
+                soil_type_lbl: "Soil Classification:",
+                irrigation_lbl: "Primary Irrigation:",
+                primary_crop_lbl: "Primary Crop:",
+
+                // Latest Advisory Result Card
+                advisory_result_title: "Latest Advisory Result",
+                advisory_new_run: "New Run",
+                top_crop_lbl: "Top Recommended Crop",
+                confidence_lbl: "Confidence:",
+                npk_lbl: "N-P-K",
+                ph_lbl: "pH Level",
+                rainfall_lbl: "Rainfall",
+
+                // Plant Health Sentry Card
+                plant_sentry_title: "Plant Health Sentry",
+                rabi_sentry_badge: "Rabi Sentry",
+                yellow_rust_title: "Yellow Rust Warning",
+                yellow_rust_desc: "Spore alerts active for Jalandhar & Kapurthala belt. Spray Propiconazole if pustules observed.",
+                btn_open_scanner: "Open Plant Pathology Scanner",
+
+                // Recent Agro Alerts Card
+                agro_alerts_title: "Recent Agro Alerts",
+                live_feeds_lbl: "Live Feeds",
+
+                // Hyperlocal Weather Widget
+                weather_widget_sub: "Hyperlocal Weather",
+                humidity_lbl: "Humidity",
+                wind_speed_lbl: "Wind Speed",
+                agronomic_advisory_lbl: "Agronomic Advisory:",
+                weather_details_link: "7-Day Forecast & Details →",
+
+                // Mandi Rates Preview Widget
+                mandi_widget_title: "Mandi Rates (₹/Qtl)",
+                view_all_lbl: "View All",
+                trend_rising: "Rising",
+                trend_falling: "Falling",
+                trend_stable: "Stable",
+
+                // Market Page
+                mandi_header_title: "Agricultural Mandi Market Rates",
+                mandi_header_desc: "Live benchmark auction rates from agricultural mandis across Punjab, Haryana, and neighboring farming zones.",
+                btn_refresh_rates: "Refresh Live Rates",
+                stat_active_mandis: "Active Reporting Mandis",
+                stat_top_commodity: "Highest Valued Commodity",
+                stat_sync_status: "Latest APMC Sync Timestamp",
+                btn_apply_filter: "Apply Filter",
+                th_commodity: "Commodity Name",
+                th_mandi: "APMC Mandi",
+                th_state: "State",
+                th_min: "Min Rate",
+                th_max: "Max Rate",
+                th_modal: "Modal Price (₹/Qtl)",
+                th_trend: "Trend",
+
+                // Disease Page
+                disease_header_title: "Plant Leaf Pathology & Health Scanner",
+                disease_header_desc: "Upload leaf photos for instant disease identification, symptoms checklist, and certified chemical/organic treatments.",
+                upload_title: "Upload or Capture Crop Leaf Image",
+                btn_diagnose: "Diagnose & Run Pathology Analysis"
             },
             hi: {
                 brand_tag: "अधिक जानें • अधिक उगाएं",
@@ -249,7 +403,91 @@
                 m_advisory: "फसल सलाह",
                 m_weather: "मौसम",
                 m_prices: "मंडी भाव",
-                m_profile: "प्रोफ़ाइल"
+                m_profile: "प्रोफ़ाइल",
+
+                // Dashboard Welcome Banner
+                advisory_active: "लाइव कृषि-सलाह इंजन सक्रिय",
+                welcome_back: "वापसी पर स्वागत है,",
+                banner_desc: "सटीक कृषि, रीयल-टाइम मौसम और आपकी खेती के लिए सर्वोत्तम स्मार्ट फसल सलाह,",
+                btn_run_advisory: "फसल सलाह शुरू करें",
+                btn_weather_insights: "मौसम विवरण देखें",
+
+                // 4 Top Cards
+                card_crop_sub: "फसल सलाह",
+                card_crop_title: "सर्वश्रेष्ठ फसल खोजें",
+                card_crop_desc: "मिट्टी और जलवायु के आधार पर",
+                card_weather_sub: "मौसम पूर्वानुमान",
+                card_weather_desc: "स्थानीय कृषि मौसम सलाह",
+                card_market_sub: "संदर्भ मूल्य",
+                card_market_title: "लाइव मंडी भाव",
+                card_market_desc: "दैनिक बाजार भाव अपडेट",
+                card_disease_sub: "पौध स्वास्थ्य",
+                card_disease_title: "रोग जांच (स्कैन)",
+                card_disease_desc: "पत्ती रोग पहचान और उपचार",
+
+                // Farm Overview Card
+                farm_overview_title: "खेत का विवरण",
+                farm_edit: "संपादित करें",
+                farm_area_lbl: "खेत का क्षेत्रफल:",
+                soil_type_lbl: "मिट्टी का प्रकार:",
+                irrigation_lbl: "मुख्य सिंचाई साधन:",
+                primary_crop_lbl: "मुख्य फसल:",
+
+                // Latest Advisory Result Card
+                advisory_result_title: "नवीनतम फसल सलाह परिणाम",
+                advisory_new_run: "नई जांच",
+                top_crop_lbl: "शीर्ष अनुशंसित फसल",
+                confidence_lbl: "सटीकता दर:",
+                npk_lbl: "एन-पी-के (N-P-K)",
+                ph_lbl: "पीएच स्तर (pH)",
+                rainfall_lbl: "वर्षा (मिमी)",
+
+                // Plant Health Sentry Card
+                plant_sentry_title: "पौधा स्वास्थ्य निगरानी",
+                rabi_sentry_badge: "रबी निगरानी",
+                yellow_rust_title: "पीला रतुआ (येलो रस्ट) चेतावनी",
+                yellow_rust_desc: "जालंधर और कपूरथला क्षेत्र के लिए चेतावनी जारी। धब्बे दिखने पर प्रोपिकोनाज़ोल का छिड़काव करें।",
+                btn_open_scanner: "पौध रोग स्कैनर खोलें",
+
+                // Recent Agro Alerts Card
+                agro_alerts_title: "हालिया कृषि सूचनाएं",
+                live_feeds_lbl: "लाइव फीड",
+
+                // Hyperlocal Weather Widget
+                weather_widget_sub: "स्थानीय मौसम",
+                humidity_lbl: "नमी",
+                wind_speed_lbl: "हवा की गति",
+                agronomic_advisory_lbl: "कृषि मौसम सलाह:",
+                weather_details_link: "7-दिवसीय पूर्वानुमान और विवरण →",
+
+                // Mandi Rates Preview Widget
+                mandi_widget_title: "मंडी भाव (₹/क्विंटल)",
+                view_all_lbl: "सभी देखें",
+                trend_rising: "तेजी",
+                trend_falling: "मंदी",
+                trend_stable: "स्थिर",
+
+                // Market Page
+                mandi_header_title: "कृषि उपज मंडी भाव",
+                mandi_header_desc: "पंजाब, हरियाणा और पड़ोसी कृषि क्षेत्रों की मंडियों से लाइव नीलामी भाव।",
+                btn_refresh_rates: "लाइव भाव ताज़ा करें",
+                stat_active_mandis: "सक्रिय रिपोर्टिंग मंडियां",
+                stat_top_commodity: "उच्चतम मूल्य वाली फसल",
+                stat_sync_status: "नवीनतम एपीएमसी सिंक समय",
+                btn_apply_filter: "फ़िल्टर लागू करें",
+                th_commodity: "फसल का नाम",
+                th_mandi: "एपीएमसी मंडी",
+                th_state: "राज्य",
+                th_min: "न्यूनतम भाव",
+                th_max: "अधिकतम भाव",
+                th_modal: "मॉडल मूल्य (₹/क्विंटल)",
+                th_trend: "रुझान",
+
+                // Disease Page
+                disease_header_title: "पौध पत्ती रोग निदान एवं स्वास्थ्य स्कैनर",
+                disease_header_desc: "पत्ती की फोटो अपलोड करें और तुरंत रोग की पहचान, लक्षण और प्रमाणित उपचार पाएं।",
+                upload_title: "फसल की पत्ती की फोटो अपलोड करें",
+                btn_diagnose: "जांच शुरू करें और निदान पाएं"
             },
             pa: {
                 brand_tag: "ਵੱਧ ਜਾਣੋ • ਵੱਧ ਉਗਾਓ",
@@ -270,10 +508,95 @@
                 m_advisory: "ਫ਼ਸਲ ਸਲਾਹ",
                 m_weather: "ਮੌਸਮ",
                 m_prices: "ਮੰਡੀ ਰੇਟ",
-                m_profile: "ਪ੍ਰੋਫਾਈਲ"
+                m_profile: "ਪ੍ਰੋਫਾਈਲ",
+
+                // Dashboard Welcome Banner
+                advisory_active: "ਲਾਈਵ ਖੇਤੀ-ਸਲਾਹ ਇੰਜਨ ਸਰਗਰਮ",
+                welcome_back: "ਜੀ ਆਇਆਂ ਨੂੰ,",
+                banner_desc: "ਸਹੀ ਖੇਤੀਬਾੜੀ, ਮੌਸਮ ਜਾਣਕਾਰੀ ਅਤੇ ਤੁਹਾਡੇ ਖੇਤ ਲਈ ਸਮਾਰਟ ਫ਼ਸਲ ਸਲਾਹ,",
+                btn_run_advisory: "ਫ਼ਸਲ ਸਲਾਹ ਚਲਾਓ",
+                btn_weather_insights: "ਮੌਸਮ ਜਾਣਕਾਰੀ ਦੇਖੋ",
+
+                // 4 Top Cards
+                card_crop_sub: "ਫ਼ਸਲ ਸਲਾਹ",
+                card_crop_title: "ਸਭ ਤੋਂ ਵਧੀਆ ਫ਼ਸਲ ਲੱਭੋ",
+                card_crop_desc: "ਮਿੱਟੀ ਅਤੇ ਮੌਸਮ ਦੇ ਆਧਾਰ 'ਤੇ",
+                card_weather_sub: "ਮੌਸਮ ਜਾਣਕਾਰੀ",
+                card_weather_desc: "ਖੇਤ ਲਈ ਸਥਾਨਕ ਸਲਾਹ",
+                card_market_sub: "ਮੰਡੀ ਰੇਟ",
+                card_market_title: "ਤਾਜ਼ਾ ਮੰਡੀ ਭਾਅ",
+                card_market_desc: "ਰੋਜ਼ਾਨਾ ਮੰਡੀ ਅਪਡੇਟ",
+                card_disease_sub: "ਬੂਟਿਆਂ ਦੀ ਸਿਹਤ",
+                card_disease_title: "ਰੋਗ ਜਾਂਚ (ਸਕੈਨ)",
+                card_disease_desc: "ਪੱਤਿਆਂ ਦੀ ਬਿਮਾਰੀ ਅਤੇ ਇਲਾਜ",
+
+                // Farm Overview Card
+                farm_overview_title: "ਖੇਤ ਦਾ ਵੇਰਵਾ",
+                farm_edit: "ਬਦਲੋ",
+                farm_area_lbl: "ਖੇਤ ਦਾ ਰਕਬਾ:",
+                soil_type_lbl: "ਮਿੱਟੀ ਦੀ ਕਿਸਮ:",
+                irrigation_lbl: "ਮੁੱਖ ਸਿੰਚਾਈ ਸਾਧਨ:",
+                primary_crop_lbl: "ਮੁੱਖ ਫ਼ਸਲ:",
+
+                // Latest Advisory Result Card
+                advisory_result_title: "ਤਾਜ਼ਾ ਫ਼ਸਲ ਸਲਾਹ ਨਤੀਜਾ",
+                advisory_new_run: "ਨਵੀਂ ਜਾਂਚ",
+                top_crop_lbl: "ਸਭ ਤੋਂ ਵਧੀਆ ਸਿਫ਼ਾਰਸ਼ ਕੀਤੀ ਫ਼ਸਲ",
+                confidence_lbl: "ਭਰੋਸੇਯੋਗਤਾ ਦਰ:",
+                npk_lbl: "ਐਨ-ਪੀ-ਕੇ (N-P-K)",
+                ph_lbl: "ਪੀ.ਐਚ. ਪੱਧਰ (pH)",
+                rainfall_lbl: "ਮੀਂਹ (ਮਿ.ਮੀ.)",
+
+                // Plant Health Sentry Card
+                plant_sentry_title: "ਬੂਟਿਆਂ ਦੀ ਸਿਹਤ ਨਿਗਰਾਨੀ",
+                rabi_sentry_badge: "ਹਾੜੀ (ਰਬੀ) ਨਿਗਰਾਨੀ",
+                yellow_rust_title: "ਪੀਲੀ ਕੁੰਗੀ (ਯੈਲੋ ਰਸਟ) ਚੇਤਾਵਨੀ",
+                yellow_rust_desc: "ਜਲੰਧਰ ਅਤੇ ਕਪੂਰਥਲਾ ਇਲਾਕੇ ਲਈ ਚੇਤਾਵਨੀ ਜਾਰੀ। ਪੀਲੇ ਧੱਬੇ ਦਿੱਸਣ 'ਤੇ ਪ੍ਰੋਪੀਕੋਨਾਜ਼ੋਲ ਦਾ ਛਿੜਕਾਅ ਕਰੋ।",
+                btn_open_scanner: "ਬੂਟਿਆਂ ਦਾ ਰੋਗ ਸਕੈਨਰ ਖੋਲ੍ਹੋ",
+
+                // Recent Agro Alerts Card
+                agro_alerts_title: "ਤਾਜ਼ਾ ਖੇਤੀ ਅਲਰਟ",
+                live_feeds_lbl: "ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ",
+
+                // Hyperlocal Weather Widget
+                weather_widget_sub: "ਸਥਾਨਕ ਮੌਸਮ",
+                humidity_lbl: "ਨਮੀ (ਸਿੱਲ੍ਹ)",
+                wind_speed_lbl: "ਹਵਾ ਦੀ ਰਫ਼ਤਾਰ",
+                agronomic_advisory_lbl: "ਖੇਤੀਬਾੜੀ ਸਲਾਹ:",
+                weather_details_link: "7-ਦਿਨਾਂ ਦਾ ਮੌਸਮ ਵੇਰਵਾ →",
+
+                // Mandi Rates Preview Widget
+                mandi_widget_title: "ਮੰਡੀ ਭਾਅ (₹/ਕੁਇੰਟਲ)",
+                view_all_lbl: "ਸਾਰੇ ਦੇਖੋ",
+                trend_rising: "ਵੱਧ ਰਿਹਾ",
+                trend_falling: "ਘੱਟ ਰਿਹਾ",
+                trend_stable: "ਸਥਿਰ",
+
+                // Market Page
+                mandi_header_title: "ਖੇਤੀਬਾੜੀ ਮੰਡੀ ਦੇ ਤਾਜ਼ਾ ਭਾਅ",
+                mandi_header_desc: "ਪੰਜਾਬ, ਹਰਿਆਣਾ ਅਤੇ ਗੁਆਂਢੀ ਇਲਾਕਿਆਂ ਦੀਆਂ ਮੰਡੀਆਂ ਦੇ ਲਾਈਵ ਨਿਲਾਮੀ ਭਾਅ।",
+                btn_refresh_rates: "ਤਾਜ਼ਾ ਭਾਅ ਅਪਡੇਟ ਕਰੋ",
+                stat_active_mandis: "ਰਿਪੋਰਟ ਕਰ ਰਹੀਆਂ ਸਰਗਰਮ ਮੰਡੀਆਂ",
+                stat_top_commodity: "ਸਭ ਤੋਂ ਵੱਧ ਭਾਅ ਵਾਲੀ ਫ਼ਸਲ",
+                stat_sync_status: "ਤਾਜ਼ਾ ਮੰਡੀ ਬੋਲੀ ਸਮਾਂ",
+                btn_apply_filter: "ਫਿਲਟਰ ਲਾਗੂ ਕਰੋ",
+                th_commodity: "ਫ਼ਸਲ ਦਾ ਨਾਮ",
+                th_mandi: "ਮੰਡੀ ਦਾ ਨਾਮ",
+                th_state: "ਸੂਬਾ",
+                th_min: "ਘੱਟੋ-ਘੱਟ ਭਾਅ",
+                th_max: "ਵੱਧ ਤੋਂ ਵੱਧ ਭਾਅ",
+                th_modal: "ਮੁੱਖ ਭਾਅ (₹/ਕੁਇੰਟਲ)",
+                th_trend: "ਰੁਝਾਨ",
+
+                // Disease Page
+                disease_header_title: "ਬੂਟਿਆਂ ਦੇ ਪੱਤਿਆਂ ਦੀ ਬਿਮਾਰੀ ਅਤੇ ਸਿਹਤ ਸਕੈਨਰ",
+                disease_header_desc: "ਪੱਤੇ ਦੀ ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ ਅਤੇ ਤੁਰੰਤ ਬਿਮਾਰੀ ਦੀ ਪਛਾਣ, ਲੱਛਣ ਅਤੇ ਦਵਾਈਆਂ ਦੇ ਸੁਝਾਅ ਪ੍ਰਾਪਤ ਕਰੋ।",
+                upload_title: "ਫ਼ਸਲ ਦੇ ਪੱਤੇ ਦੀ ਫੋਟੋ ਅਪਲੋਡ ਕਰੋ",
+                btn_diagnose: "ਬਿਮਾਰੀ ਦੀ ਜਾਂਚ ਸ਼ੁਰੂ ਕਰੋ"
             }
         };
 
+        // Multilingual Switcher (Default: English)
         function setLanguage(lang) {
             if (!translations[lang]) lang = 'en';
 
@@ -288,21 +611,59 @@
                 }
             });
 
-            // Update button styles
+            // Update placeholders for search inputs
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update active button styles
             ['en', 'hi', 'pa'].forEach(l => {
                 const btn = document.getElementById('btn-lang-' + l);
                 if (btn) {
                     if (l === lang) {
                         btn.className = 'px-2.5 py-1 rounded-lg transition font-bold bg-white text-brand-dark shadow-sm';
                     } else {
-                        btn.className = 'px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark';
+                        btn.className = 'px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark font-medium';
                     }
                 }
             });
         }
 
-        // Apply saved language on page load
+        // Dark Mode / Light Mode Engine (Default: Light Mode)
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            const theme = isDark ? 'dark' : 'light';
+            localStorage.setItem('agrisaarthi_theme', theme);
+            updateThemeUI(theme);
+        }
+
+        function updateThemeUI(theme) {
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            const btn = document.getElementById('btn-theme-toggle');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                if (icon) icon.className = 'fa-solid fa-sun text-amber-400 text-sm';
+                if (label) label.textContent = 'Light';
+                if (btn) btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-100 text-xs font-bold shadow-sm transition';
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (icon) icon.className = 'fa-solid fa-moon text-amber-500 text-sm';
+                if (label) label.textContent = 'Dark';
+                if (btn) btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition';
+            }
+        }
+
+        // Apply saved language & theme on initial page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Default to Light Mode
+            const savedTheme = localStorage.getItem('agrisaarthi_theme') || 'light';
+            updateThemeUI(savedTheme);
+
+            // Default to English
             const savedLang = localStorage.getItem('agrisaarthi_lang') || 'en';
             setLanguage(savedLang);
         });

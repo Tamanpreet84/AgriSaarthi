@@ -13,20 +13,23 @@
         <div class="relative z-10 max-w-2xl">
             <div class="inline-flex items-center space-x-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200 mb-3 backdrop-blur-sm">
                 <span class="w-2 h-2 rounded-full bg-[#52b788] animate-ping"></span>
-                <span>Live Agro-Advisory Engine Active</span>
+                <span data-i18n="advisory_active">Live Agro-Advisory Engine Active</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Welcome back, @Model.FarmerName!</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <span data-i18n="welcome_back">Welcome back,</span> @Model.FarmerName!
+            </h1>
             <p class="text-emerald-100 text-sm sm:text-base mt-2 leading-relaxed">
-                Precision agronomy, real-time weather telemetries, and smart crop advisory tailored for your farm in <span class="font-bold underline text-white">@Model.Location</span>.
+                <span data-i18n="banner_desc">Precision agronomy, real-time weather telemetries, and smart crop advisory tailored for your farm in</span> 
+                <span class="font-bold underline text-white">@Model.Location</span>.
             </p>
             <div class="mt-5 flex flex-wrap gap-3">
                 <a asp-controller="Crop" asp-action="Recommend" class="px-4 py-2 bg-white text-[#1b4332] font-bold text-xs rounded-xl shadow hover:bg-emerald-50 transition flex items-center space-x-2">
                     <i class="fa-solid fa-seedling text-[#27ae60]"></i>
-                    <span>Run Crop Advisory</span>
+                    <span data-i18n="btn_run_advisory">Run Crop Advisory</span>
                 </a>
                 <a href="/weather" class="px-4 py-2 bg-black/20 hover:bg-black/30 border border-white/20 text-white font-semibold text-xs rounded-xl transition flex items-center space-x-2">
                     <i class="fa-solid fa-cloud-sun text-sky-300"></i>
-                    <span>View Weather Insights</span>
+                    <span data-i18n="btn_weather_insights">View Weather Insights</span>
                 </a>
             </div>
         </div>
@@ -39,9 +42,9 @@
         <a asp-controller="Crop" asp-action="Recommend" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Crop Advisory</p>
-                    <p class="text-lg font-bold text-[#1b4332] mt-1 group-hover:text-[#27ae60] transition">Find Best Crop</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Based on soil & climate</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="card_crop_sub">Crop Advisory</p>
+                    <p class="text-lg font-bold text-[#1b4332] mt-1 group-hover:text-[#27ae60] transition" data-i18n="card_crop_title">Find Best Crop</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="card_crop_desc">Based on soil & climate</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#27ae60] flex items-center justify-center text-xl group-hover:scale-110 transition">
                     <i class="fa-solid fa-seedling"></i>
@@ -53,9 +56,9 @@
         <a href="/weather" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Weather Forecast</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="card_weather_sub">Weather Forecast</p>
                     <p class="text-lg font-bold text-sky-800 mt-1">@Model.Temperature°C • Sunny</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Localized farm advisory</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="card_weather_desc">Localized farm advisory</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-xl group-hover:scale-110 transition">
                     <i class="fa-solid fa-cloud-sun"></i>
@@ -67,9 +70,9 @@
         <a href="/market-prices" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Reference Prices</p>
-                    <p class="text-lg font-bold text-amber-800 mt-1">Live Mandi Rates</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Daily market updates</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="card_market_sub">Reference Prices</p>
+                    <p class="text-lg font-bold text-amber-800 mt-1" data-i18n="card_market_title">Live Mandi Rates</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="card_market_desc">Daily market updates</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition">
                     <i class="fa-solid fa-indian-rupee-sign"></i>
@@ -81,9 +84,9 @@
         <a href="/disease-detection" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Plant Health</p>
-                    <p class="text-lg font-bold text-[#1b4332] mt-1">Disease Scan</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Leaf pathology & cure</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="card_disease_sub">Plant Health</p>
+                    <p class="text-lg font-bold text-[#1b4332] mt-1" data-i18n="card_disease_title">Disease Scan</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="card_disease_desc">Leaf pathology & cure</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-[#e8f3ee] text-[#145a32] flex items-center justify-center text-xl group-hover:scale-110 transition">
                     <i class="fa-solid fa-microscope"></i>
@@ -109,26 +112,26 @@
                             <span class="w-8 h-8 rounded-lg bg-emerald-50 text-[#27ae60] flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-tractor"></i>
                             </span>
-                            <h3 class="font-bold text-slate-800 text-sm">Farm Overview</h3>
+                            <h3 class="font-bold text-slate-800 text-sm" data-i18n="farm_overview_title">Farm Overview</h3>
                         </div>
-                        <a asp-controller="Home" asp-action="Profile" class="text-xs text-[#27ae60] font-semibold hover:underline">Edit</a>
+                        <a asp-controller="Home" asp-action="Profile" class="text-xs text-[#27ae60] font-semibold hover:underline" data-i18n="farm_edit">Edit</a>
                     </div>
 
                     <div class="mt-4 space-y-3 text-xs">
                         <div class="flex justify-between py-1.5 border-b border-slate-50">
-                            <span class="text-slate-500 font-medium">Farm Area:</span>
+                            <span class="text-slate-500 font-medium" data-i18n="farm_area_lbl">Farm Area:</span>
                             <span class="font-bold text-slate-800">@Model.FarmSize Acres</span>
                         </div>
                         <div class="flex justify-between py-1.5 border-b border-slate-50">
-                            <span class="text-slate-500 font-medium">Soil Classification:</span>
+                            <span class="text-slate-500 font-medium" data-i18n="soil_type_lbl">Soil Classification:</span>
                             <span class="font-bold text-slate-800">@Model.SoilType</span>
                         </div>
                         <div class="flex justify-between py-1.5 border-b border-slate-50">
-                            <span class="text-slate-500 font-medium">Primary Irrigation:</span>
+                            <span class="text-slate-500 font-medium" data-i18n="irrigation_lbl">Primary Irrigation:</span>
                             <span class="font-bold text-slate-800">@Model.IrrigationType</span>
                         </div>
                         <div class="flex justify-between py-1.5">
-                            <span class="text-slate-500 font-medium">Primary Crop:</span>
+                            <span class="text-slate-500 font-medium" data-i18n="primary_crop_lbl">Primary Crop:</span>
                             <span class="font-bold text-[#1b4332] bg-[#e8f3ee] px-2 py-0.5 rounded">@Model.PrimaryCrop</span>
                         </div>
                     </div>
@@ -141,30 +144,33 @@
                             <span class="w-8 h-8 rounded-lg bg-emerald-50 text-[#27ae60] flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-seedling"></i>
                             </span>
-                            <h3 class="font-bold text-slate-800 text-sm">Latest Advisory Result</h3>
+                            <h3 class="font-bold text-slate-800 text-sm" data-i18n="advisory_result_title">Latest Advisory Result</h3>
                         </div>
-                        <a asp-controller="Crop" asp-action="Recommend" class="text-xs text-[#27ae60] font-semibold hover:underline">New Run</a>
+                        <a asp-controller="Crop" asp-action="Recommend" class="text-xs text-[#27ae60] font-semibold hover:underline" data-i18n="advisory_new_run">New Run</a>
                     </div>
 
                     <div class="mt-4">
                         @if (Model.LatestAdvisory != null)
                         {
                             <div class="bg-gradient-to-r from-emerald-50 to-[#e8f3ee] p-4 rounded-xl border border-emerald-100 mb-3">
-                                <p class="text-[11px] font-bold uppercase tracking-wider text-[#27ae60]">Top Recommended Crop</p>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-[#27ae60]" data-i18n="top_crop_lbl">Top Recommended Crop</p>
                                 <p class="text-xl font-extrabold text-[#1b4332] mt-0.5">@Model.LatestAdvisory.RecommendedCrop</p>
-                                <p class="text-xs text-slate-600 mt-1">Confidence: <span class="font-bold text-[#27ae60]">@((int)(Model.LatestAdvisory.ConfidenceScore * 100))%</span></p>
+                                <p class="text-xs text-slate-600 mt-1">
+                                    <span data-i18n="confidence_lbl">Confidence:</span> 
+                                    <span class="font-bold text-[#27ae60]">@((int)(Model.LatestAdvisory.ConfidenceScore * 100))%</span>
+                                </p>
                             </div>
                             <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
                                 <div class="bg-slate-50 p-2 rounded-lg">
-                                    <span class="text-slate-400 block font-medium">N-P-K</span>
+                                    <span class="text-slate-400 block font-medium" data-i18n="npk_lbl">N-P-K</span>
                                     <span class="font-bold text-slate-700">@Model.LatestAdvisory.Nitrogen-@Model.LatestAdvisory.Phosphorus-@Model.LatestAdvisory.Potassium</span>
                                 </div>
                                 <div class="bg-slate-50 p-2 rounded-lg">
-                                    <span class="text-slate-400 block font-medium">pH Level</span>
+                                    <span class="text-slate-400 block font-medium" data-i18n="ph_lbl">pH Level</span>
                                     <span class="font-bold text-slate-700">@Model.LatestAdvisory.Ph</span>
                                 </div>
                                 <div class="bg-slate-50 p-2 rounded-lg">
-                                    <span class="text-slate-400 block font-medium">Rainfall</span>
+                                    <span class="text-slate-400 block font-medium" data-i18n="rainfall_lbl">Rainfall</span>
                                     <span class="font-bold text-slate-700">@Model.LatestAdvisory.Rainfall mm</span>
                                 </div>
                             </div>
@@ -190,9 +196,9 @@
                     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-microscope text-[#27ae60]"></i>
-                            <h3 class="font-bold text-slate-800 text-sm">Plant Health Sentry</h3>
+                            <h3 class="font-bold text-slate-800 text-sm" data-i18n="plant_sentry_title">Plant Health Sentry</h3>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Rabi Sentry</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200" data-i18n="rabi_sentry_badge">Rabi Sentry</span>
                     </div>
 
                     <div class="mt-4 space-y-3">
@@ -201,11 +207,11 @@
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                             </span>
                             <div class="text-xs">
-                                <p class="font-bold text-slate-800">Yellow Rust Warning</p>
-                                <p class="text-slate-500 mt-0.5">Spore alerts active for Jalandhar & Kapurthala belt. Spray Propiconazole if pustules observed.</p>
+                                <p class="font-bold text-slate-800" data-i18n="yellow_rust_title">Yellow Rust Warning</p>
+                                <p class="text-slate-500 mt-0.5" data-i18n="yellow_rust_desc">Spore alerts active for Jalandhar & Kapurthala belt. Spray Propiconazole if pustules observed.</p>
                             </div>
                         </div>
-                        <a href="/disease-detection" class="block w-full py-2 text-center text-xs font-semibold text-[#27ae60] bg-[#e8f3ee] hover:bg-[#d8ece1] rounded-xl transition">
+                        <a href="/disease-detection" class="block w-full py-2 text-center text-xs font-semibold text-[#27ae60] bg-[#e8f3ee] hover:bg-[#d8ece1] rounded-xl transition" data-i18n="btn_open_scanner">
                             Open Plant Pathology Scanner
                         </a>
                     </div>
@@ -216,9 +222,9 @@
                     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-bell text-[#d97706]"></i>
-                            <h3 class="font-bold text-slate-800 text-sm">Recent Agro Alerts</h3>
+                            <h3 class="font-bold text-slate-800 text-sm" data-i18n="agro_alerts_title">Recent Agro Alerts</h3>
                         </div>
-                        <span class="text-[10px] text-slate-400">Live Feeds</span>
+                        <span class="text-[10px] text-slate-400" data-i18n="live_feeds_lbl">Live Feeds</span>
                     </div>
 
                     <div class="mt-3 space-y-2.5">
@@ -246,7 +252,7 @@
             <div class="bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
                 <div class="flex items-center justify-between">
                     <div>
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-sky-200">Hyperlocal Weather</span>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-sky-200" data-i18n="weather_widget_sub">Hyperlocal Weather</span>
                         <h4 class="text-lg font-bold">@Model.Location</h4>
                     </div>
                     <i class="fa-solid fa-sun text-3xl text-amber-300 animate-spin-slow"></i>
@@ -259,22 +265,24 @@
 
                 <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
                     <div class="bg-white/10 rounded-xl p-2.5 backdrop-blur-sm">
-                        <span class="text-sky-200 block text-[10px]">Humidity</span>
+                        <span class="text-sky-200 block text-[10px]" data-i18n="humidity_lbl">Humidity</span>
                         <span class="font-bold text-sm">@Model.Humidity%</span>
                     </div>
                     <div class="bg-white/10 rounded-xl p-2.5 backdrop-blur-sm">
-                        <span class="text-sky-200 block text-[10px]">Wind Speed</span>
+                        <span class="text-sky-200 block text-[10px]" data-i18n="wind_speed_lbl">Wind Speed</span>
                         <span class="font-bold text-sm">@Model.WindSpeed km/h</span>
                     </div>
                 </div>
 
                 <div class="mt-4 p-3 bg-white/15 rounded-xl text-xs backdrop-blur-sm">
-                    <p class="font-semibold text-amber-200 text-[11px] mb-0.5"><i class="fa-solid fa-lightbulb mr-1"></i> Agronomic Advisory:</p>
+                    <p class="font-semibold text-amber-200 text-[11px] mb-0.5">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> <span data-i18n="agronomic_advisory_lbl">Agronomic Advisory:</span>
+                    </p>
                     <p class="text-sky-100 text-[11px] leading-relaxed">@Model.WeatherTip</p>
                 </div>
 
                 <div class="mt-3 text-right">
-                    <a href="/weather" class="text-xs font-bold text-white hover:underline">7-Day Forecast & Details →</a>
+                    <a href="/weather" class="text-xs font-bold text-white hover:underline" data-i18n="weather_details_link">7-Day Forecast & Details →</a>
                 </div>
             </div>
 
@@ -283,9 +291,9 @@
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-indian-rupee-sign text-amber-600"></i>
-                        <h3 class="font-bold text-slate-800 text-sm">Mandi Rates (₹/Qtl)</h3>
+                        <h3 class="font-bold text-slate-800 text-sm" data-i18n="mandi_widget_title">Mandi Rates (₹/Qtl)</h3>
                     </div>
-                    <a href="/market-prices" class="text-xs text-[#27ae60] font-semibold hover:underline">View All</a>
+                    <a href="/market-prices" class="text-xs text-[#27ae60] font-semibold hover:underline" data-i18n="view_all_lbl">View All</a>
                 </div>
 
                 <div class="mt-3 divide-y divide-slate-100">
@@ -300,15 +308,15 @@
                                 <span class="font-extrabold text-slate-900">₹@price.ModalPrice</span>
                                 @if (price.Trend == "up")
                                 {
-                                    <span class="block text-[10px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> Rising</span>
+                                    <span class="block text-[10px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> <span data-i18n="trend_rising">Rising</span></span>
                                 }
                                 else if (price.Trend == "down")
                                 {
-                                    <span class="block text-[10px] text-red-500 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> Falling</span>
+                                    <span class="block text-[10px] text-red-500 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> <span data-i18n="trend_falling">Falling</span></span>
                                 }
                                 else
                                 {
-                                    <span class="block text-[10px] text-slate-400 font-semibold">• Stable</span>
+                                    <span class="block text-[10px] text-slate-400 font-semibold">• <span data-i18n="trend_stable">Stable</span></span>
                                 }
                             </div>
                         </div>
