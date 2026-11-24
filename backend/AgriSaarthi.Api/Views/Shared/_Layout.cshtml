@@ -25,9 +25,9 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f7f5; }
+        body { font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', sans-serif; background-color: #f3f7f5; }
         .sidebar-active {
             background-color: #e8f3ee;
             color: #1b4332;
@@ -49,7 +49,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-brand-dark tracking-tight leading-none">AgriSaarthi</h1>
-                    <p class="text-[10px] uppercase font-bold tracking-wider text-brand-gold mt-1">Know More • Grow More</p>
+                    <p class="text-[10px] uppercase font-bold tracking-wider text-brand-gold mt-1" data-i18n="brand_tag">Know More • Grow More</p>
                 </div>
             </div>
 
@@ -58,53 +58,53 @@
                 <a asp-controller="Home" asp-action="Dashboard" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "sidebar-active" : "")">
                     <i class="fa-solid fa-house w-5 text-center text-slate-500"></i>
-                    <span>Farmer Dashboard</span>
+                    <span data-i18n="nav_dashboard">Farmer Dashboard</span>
                 </a>
 
                 <a asp-controller="Crop" asp-action="Recommend" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Crop" ? "sidebar-active" : "")">
                     <i class="fa-solid fa-seedling w-5 text-center text-[#27ae60]"></i>
-                    <span>Crop Advisory</span>
+                    <span data-i18n="nav_crop">Crop Advisory</span>
                 </a>
 
                 <a href="/weather" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/weather") == true ? "sidebar-active" : "")">
                     <i class="fa-solid fa-cloud-sun w-5 text-center text-sky-500"></i>
-                    <span>Weather Forecast</span>
+                    <span data-i18n="nav_weather">Weather Forecast</span>
                 </a>
 
                 <a href="/market-prices" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/market-prices") == true ? "sidebar-active" : "")">
                     <i class="fa-solid fa-indian-rupee-sign w-5 text-center text-amber-500"></i>
-                    <span>Mandi Market Rates</span>
+                    <span data-i18n="nav_market">Mandi Market Rates</span>
                 </a>
 
                 <a href="/disease-detection" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/disease-detection") == true ? "sidebar-active" : "")">
                     <i class="fa-solid fa-microscope w-5 text-center text-emerald-600"></i>
-                    <span>Plant Health & Disease</span>
+                    <span data-i18n="nav_disease">Plant Health & Disease</span>
                 </a>
 
                 <a href="/farming-tips" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/farming-tips") == true ? "sidebar-active" : "")">
                     <i class="fa-regular fa-lightbulb w-5 text-center text-amber-500"></i>
-                    <span>Farming Tips</span>
+                    <span data-i18n="nav_tips">Farming Tips</span>
                 </a>
 
                 <a href="/knowledge-hub" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(Context.Request.Path.Value?.StartsWith("/knowledge-hub") == true ? "sidebar-active" : "")">
                     <i class="fa-solid fa-book-open w-5 text-center text-blue-500"></i>
-                    <span>Knowledge Hub</span>
+                    <span data-i18n="nav_knowledge">Knowledge Hub</span>
                 </a>
 
                 <div class="pt-4 pb-1">
-                    <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Farmer Account</p>
+                    <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400" data-i18n="nav_account_section">Farmer Account</p>
                 </div>
 
                 <a asp-controller="Home" asp-action="Profile" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-[#e8f3ee] hover:text-brand-dark transition-colors @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "sidebar-active" : "")">
                     <i class="fa-solid fa-user-gear w-5 text-center text-slate-500"></i>
-                    <span>Farmer Profile</span>
+                    <span data-i18n="nav_profile">Farmer Profile</span>
                 </a>
             </nav>
 
@@ -116,7 +116,7 @@
                     </div>
                     <div class="min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate">@(User.Identity?.Name ?? "Taman Preet Singh")</p>
-                        <p class="text-[10px] text-slate-500 truncate">Registered Farmer</p>
+                        <p class="text-[10px] text-slate-500 truncate" data-i18n="lbl_registered_farmer">Registered Farmer</p>
                     </div>
                 </div>
                 <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
@@ -138,8 +138,8 @@
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                     <div>
-                        <span class="text-xs font-bold text-brand-medium uppercase tracking-wider">ASP.NET Core • SQL Server</span>
-                        <h2 class="text-base sm:text-lg font-bold text-brand-dark leading-tight">AgriSaarthi Advisory System</h2>
+                        <span class="text-xs font-bold text-brand-medium uppercase tracking-wider" data-i18n="header_tech">ASP.NET Core • SQL Server</span>
+                        <h2 class="text-base sm:text-lg font-bold text-brand-dark leading-tight" data-i18n="header_title">AgriSaarthi Advisory System</h2>
                     </div>
                 </div>
 
@@ -147,17 +147,17 @@
                     <!-- Status Badge -->
                     <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-                        SQL Server Connected
+                        <span data-i18n="status_db_connected">SQL Server Connected</span>
                     </span>
 
-                    <!-- Quick Language Pill -->
-                    <div class="hidden md:flex items-center bg-slate-100 rounded-lg p-1 text-xs font-medium text-slate-600">
-                        <span class="px-2 py-0.5 rounded bg-white font-bold text-brand-dark shadow-sm">EN</span>
-                        <span class="px-2 py-0.5 text-slate-500 hover:text-brand-dark cursor-pointer">हिंदी</span>
-                        <span class="px-2 py-0.5 text-slate-500 hover:text-brand-dark cursor-pointer">ਪੰਜਾਬੀ</span>
+                    <!-- Fully Functional Multilingual Language Switcher -->
+                    <div class="flex items-center bg-slate-100 rounded-xl p-1 text-xs font-bold text-slate-600 border border-slate-200">
+                        <button type="button" onclick="setLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 rounded-lg transition shadow-sm bg-white text-brand-dark">EN</button>
+                        <button type="button" onclick="setLanguage('hi')" id="btn-lang-hi" class="px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark">हिंदी</button>
+                        <button type="button" onclick="setLanguage('pa')" id="btn-lang-pa" class="px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark">ਪੰਜਾਬੀ</button>
                     </div>
 
-                    <!-- User Profile Dropdown shortcut -->
+                    <!-- User Profile Shortcut -->
                     <a asp-controller="Home" asp-action="Profile" class="flex items-center space-x-2 text-sm text-slate-700 hover:text-brand-dark font-medium">
                         <div class="w-8 h-8 rounded-full bg-[#e8f3ee] text-brand-dark font-bold flex items-center justify-center border border-brand-light">
                             <i class="fa-solid fa-user text-xs"></i>
@@ -182,29 +182,131 @@
             <div class="lg:hidden bg-white border-t border-slate-200 flex justify-around items-center h-16 px-2 z-40">
                 <a asp-controller="Home" asp-action="Dashboard" class="flex flex-col items-center justify-center text-brand-dark">
                     <i class="fa-solid fa-house text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Home</span>
+                    <span class="text-[10px] mt-1 font-medium" data-i18n="m_home">Home</span>
                 </a>
                 <a asp-controller="Crop" asp-action="Recommend" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
                     <i class="fa-solid fa-seedling text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Advisory</span>
+                    <span class="text-[10px] mt-1 font-medium" data-i18n="m_advisory">Advisory</span>
                 </a>
                 <a href="/weather" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
                     <i class="fa-solid fa-cloud-sun text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Weather</span>
+                    <span class="text-[10px] mt-1 font-medium" data-i18n="m_weather">Weather</span>
                 </a>
                 <a href="/market-prices" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
                     <i class="fa-solid fa-indian-rupee-sign text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Prices</span>
+                    <span class="text-[10px] mt-1 font-medium" data-i18n="m_prices">Prices</span>
                 </a>
                 <a asp-controller="Home" asp-action="Profile" class="flex flex-col items-center justify-center text-slate-500 hover:text-brand-dark">
                     <i class="fa-solid fa-user text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Profile</span>
+                    <span class="text-[10px] mt-1 font-medium" data-i18n="m_profile">Profile</span>
                 </a>
             </div>
 
         </div>
 
     </div>
+
+    <!-- Multilingual Translation Engine Script -->
+    <script>
+        const translations = {
+            en: {
+                brand_tag: "Know More • Grow More",
+                nav_dashboard: "Farmer Dashboard",
+                nav_crop: "Crop Advisory",
+                nav_weather: "Weather Forecast",
+                nav_market: "Mandi Market Rates",
+                nav_disease: "Plant Health & Disease",
+                nav_tips: "Farming Tips",
+                nav_knowledge: "Knowledge Hub",
+                nav_account_section: "Farmer Account",
+                nav_profile: "Farmer Profile",
+                lbl_registered_farmer: "Registered Farmer",
+                header_tech: "ASP.NET Core • SQL Server",
+                header_title: "AgriSaarthi Advisory System",
+                status_db_connected: "SQL Server Connected",
+                m_home: "Home",
+                m_advisory: "Advisory",
+                m_weather: "Weather",
+                m_prices: "Prices",
+                m_profile: "Profile"
+            },
+            hi: {
+                brand_tag: "अधिक जानें • अधिक उगाएं",
+                nav_dashboard: "किसान डैशबोर्ड",
+                nav_crop: "फसल सलाह",
+                nav_weather: "मौसम पूर्वानुमान",
+                nav_market: "मंडी बाजार भाव",
+                nav_disease: "पौधा स्वास्थ्य एवं रोग",
+                nav_tips: "खेती के सुझाव",
+                nav_knowledge: "कृषि ज्ञान केंद्र",
+                nav_account_section: "किसान खाता",
+                nav_profile: "किसान प्रोफ़ाइल",
+                lbl_registered_farmer: "पंजीकृत किसान",
+                header_tech: "एएसपी.नेट कोर • एसक्यूएल सर्वर",
+                header_title: "एग्रीसारथी कृषि सलाह प्रणाली",
+                status_db_connected: "एसक्यूएल सर्वर कनेक्टेड",
+                m_home: "मुख्य पृष्ठ",
+                m_advisory: "फसल सलाह",
+                m_weather: "मौसम",
+                m_prices: "मंडी भाव",
+                m_profile: "प्रोफ़ाइल"
+            },
+            pa: {
+                brand_tag: "ਵੱਧ ਜਾਣੋ • ਵੱਧ ਉਗਾਓ",
+                nav_dashboard: "ਕਿਸਾਨ ਡੈਸ਼ਬੋਰਡ",
+                nav_crop: "ਫ਼ਸਲ ਸਲਾਹ",
+                nav_weather: "ਮੌਸਮ ਜਾਣਕਾਰੀ",
+                nav_market: "ਮੰਡੀ ਦੇ ਭਾਅ",
+                nav_disease: "ਬੂਟਿਆਂ ਦੀ ਸਿਹਤ ਅਤੇ ਰੋਗ",
+                nav_tips: "ਖੇਤੀਬਾੜੀ ਸੁਝਾਅ",
+                nav_knowledge: "ਖੇਤੀ ਗਿਆਨ ਕੇਂਦਰ",
+                nav_account_section: "ਕਿਸਾਨ ਖਾਤਾ",
+                nav_profile: "ਕਿਸਾਨ ਪ੍ਰੋਫਾਈਲ",
+                lbl_registered_farmer: "ਰਜਿਸਟਰਡ ਕਿਸਾਨ",
+                header_tech: "ਏ.ਐਸ.ਪੀ.ਨੈੱਟ ਕੋਰ • ਐਸ.ਕਿਊ.ਐਲ ਸਰਵਰ",
+                header_title: "ਐਗਰੀਸਾਰਥੀ ਖੇਤੀ ਸਲਾਹ ਪ੍ਰਣਾਲੀ",
+                status_db_connected: "ਐਸ.ਕਿਊ.ਐਲ ਸਰਵਰ ਜੁੜਿਆ ਹੋਇਆ ਹੈ",
+                m_home: "ਮੁੱਖ ਪੰਨਾ",
+                m_advisory: "ਫ਼ਸਲ ਸਲਾਹ",
+                m_weather: "ਮੌਸਮ",
+                m_prices: "ਮੰਡੀ ਰੇਟ",
+                m_profile: "ਪ੍ਰੋਫਾਈਲ"
+            }
+        };
+
+        function setLanguage(lang) {
+            if (!translations[lang]) lang = 'en';
+
+            // Save preference to localStorage
+            localStorage.setItem('agrisaarthi_lang', lang);
+
+            // Update UI text for all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Update button styles
+            ['en', 'hi', 'pa'].forEach(l => {
+                const btn = document.getElementById('btn-lang-' + l);
+                if (btn) {
+                    if (l === lang) {
+                        btn.className = 'px-2.5 py-1 rounded-lg transition font-bold bg-white text-brand-dark shadow-sm';
+                    } else {
+                        btn.className = 'px-2.5 py-1 rounded-lg transition text-slate-600 hover:text-brand-dark';
+                    }
+                }
+            });
+        }
+
+        // Apply saved language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('agrisaarthi_lang') || 'en';
+            setLanguage(savedLang);
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
