@@ -45,6 +45,9 @@ namespace AgriSaarthi.Api.Models.ViewModels
         public double ConfidencePercent { get; set; }
         public string Severity { get; set; } = "Moderate";
         public string Description { get; set; } = string.Empty;
+        public string? UploadedImageBase64 { get; set; }
+        public string? ImageFileName { get; set; }
+        public string? ErrorMessage { get; set; }
         public List<string> Symptoms { get; set; } = new();
         public List<string> RecommendedTreatments { get; set; } = new();
         public List<string> PreventiveMeasures { get; set; } = new();
