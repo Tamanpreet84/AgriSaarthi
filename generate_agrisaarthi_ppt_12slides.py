@@ -354,7 +354,7 @@ p_sol_h.font.size = Pt(12)
 p_sol_h.font.bold = True
 p_sol_h.font.color.rgb = C_SECONDARY
 
-add_bullet_point(tf_sol, "Precision AI Crop Matching:", "Data-driven Random Forest model (99.2% accuracy) recommending the exact optimal crop based on real N-P-K values, soil pH, and climate telemetry.", 11)
+add_bullet_point(tf_sol, "Precision AI Crop Matching:", "Data-driven Random Forest model (90% accuracy) recommending the exact optimal crop based on real N-P-K values, soil pH, and climate telemetry.", 11)
 add_bullet_point(tf_sol, "Direct Live APMC Mandi Feeds:", "Transparent real-time auction rates from Khanna, Amritsar, Bathinda, Sirsa, etc., empowering farmers to negotiate fair prices.", 11)
 add_bullet_point(tf_sol, "Instant Leaf Disease Diagnosis:", "Upload photo of infected crop leaf; system identifies pathogen, checklists symptoms, and prescribes certified chemical dosages.", 11)
 add_bullet_point(tf_sol, "Complete Regional Inclusivity:", "Instant one-click switching across English, Hindi (हिंदी), and Punjabi (ਪੰਜਾਬੀ), with custom Dark & Light mode accessibility.", 11)
@@ -482,7 +482,7 @@ add_header(s5, "AI Engine: Random Forest Crop Recommendation", "Chapter 4 · Mac
 
 # Top 4 Metrics Cards
 metrics = [
-    ("99.2%", "TEST SET ACCURACY", "Evaluated on 440 stratified test samples with precision & recall above 0.98.", C_PRIMARY),
+    ("90%", "TEST SET ACCURACY", "Evaluated on 440 stratified test samples with balanced precision & recall across all crops.", C_PRIMARY),
     ("2,200", "AGRONOMIC SAMPLES", "Curated Indian soil instances across 22 major food, fiber, and cash crops.", C_SECONDARY),
     ("< 50ms", "INFERENCE LATENCY", "High-throughput asynchronous FastAPI workers serving serialized Joblib models.", C_ACCENT),
     ("7 FEATURES", "TELEMETRY INPUTS", "N, P, K macronutrients, ambient temperature, humidity, soil pH, and rainfall.", C_GOLD)
@@ -766,7 +766,7 @@ add_header(s10, "Experimental Results & Verification Benchmarks", "Chapter 9 · 
 # Top 3 Benchmark Scorecards
 scorecards = [
     ("< 60 ms", "API GATEWAY LATENCY", "Kestrel ASP.NET Core 10 pipeline benchmarked under concurrent load.", C_PRIMARY),
-    ("99.2%", "CLASSIFICATION ACCURACY", "Random Forest ensemble on 440 stratified test samples across 22 crops.", C_SECONDARY),
+    ("90%", "CLASSIFICATION ACCURACY", "Random Forest ensemble on 440 stratified test samples across 22 crops.", C_SECONDARY),
     ("100%", "TEST SUITE COMPLETION", "Unit and integration tests across controllers, repository layers, and AI endpoints.", C_GOLD)
 ]
 
@@ -912,7 +912,7 @@ p_del_h.font.bold = True
 p_del_h.font.color.rgb = C_PRIMARY
 
 add_bullet_point(tf_del, "Full-Stack ASP.NET Core 10 API:", "Enterprise Web API configured on port 5000 with Dual Authentication (JWT + Cookies), CORS middleware, and EF Core migrations.", 10.5)
-add_bullet_point(tf_del, "AI Crop Recommendation Engine:", "FastAPI microservice on port 8000 serving serialized 99.2% Random Forest model with sub-50ms inference.", 10.5)
+add_bullet_point(tf_del, "AI Crop Recommendation Engine:", "FastAPI microservice on port 8000 serving serialized 90% Random Forest model with sub-50ms inference.", 10.5)
 add_bullet_point(tf_del, "Plant Leaf Disease Pathology Sentry:", "Multi-crop computer vision diagnosis covering Wheat Yellow Rust, Rice Blast, Tomato/Potato Blight, and Cotton Blight.", 10.5)
 add_bullet_point(tf_del, "Microsoft SQL Server LocalDB:", "Production database hosting Farmers, Profiles, CropAdvisories, and live APMC MarketPrices.", 10.5)
 add_bullet_point(tf_del, "Complete Multilingual Support:", "Instant one-click switching across English, Hindi (हिंदी), and Punjabi (ਪੰਜਾਬੀ), with custom Dark & Light mode.", 10.5)
