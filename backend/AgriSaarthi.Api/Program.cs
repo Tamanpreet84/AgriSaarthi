@@ -97,6 +97,13 @@ builder.Services.AddCors(options =>
                         .AllowCredentials());
 });
 
+// Bind to cloud platform PORT if specified (e.g. Render, Railway)
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
 var app = builder.Build();
 
 // Static Files & Web Assets

@@ -51,3 +51,6 @@ data/
 .idea/
 .DS_Store
 Thumbs.db
+
+publish/
+*.db

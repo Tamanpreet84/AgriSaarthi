@@ -42,8 +42,17 @@ class CropRecommendationRequest(BaseModel):
     ph: float
     rainfall: float
 
+def resolve_ml_path(sub_path):
+    candidate_1 = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', sub_path)
+    if os.path.exists(candidate_1):
+        return candidate_1
+    candidate_2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ml', sub_path)
+    if os.path.exists(candidate_2):
+        return candidate_2
+    return candidate_1
+
 # Load the model on startup
-model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'crop-recommendation', 'model', 'crop_rf_model.joblib')
+model_path = resolve_ml_path(os.path.join('crop-recommendation', 'model', 'crop_rf_model.joblib'))
 crop_model = None
 
 def load_crop_model():
@@ -108,8 +117,8 @@ except ImportError:
     device = None
     disease_transforms = None
 
-disease_model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'disease-detection', 'model', 'disease_model.pth')
-classes_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ml', 'disease-detection', 'model', 'classes.json')
+disease_model_path = resolve_ml_path(os.path.join('disease-detection', 'model', 'disease_model.pth'))
+classes_path = resolve_ml_path(os.path.join('disease-detection', 'model', 'classes.json'))
 
 disease_model = None
 disease_classes = []

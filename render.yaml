@@ -1,0 +1,64 @@
+# ==============================================================================
+# AgriSaarthi Render Blueprint (render.yaml)
+# Full-Stack Deployment: AI Service + ASP.NET Core 10 Backend + React 19 Frontend
+# ==============================================================================
+services:
+  # --------------------------------------------------------------------------
+  # 1. AgriSaarthi AI Microservice (Python FastAPI + Scikit-Learn Model)
+  # --------------------------------------------------------------------------
+  - type: web
+    name: agrisaarthi-ai-service
+    runtime: docker
+    dockerfilePath: ./ai-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ALLOWED_ORIGINS
+        value: "*"
+
+  # --------------------------------------------------------------------------
+  # 2. AgriSaarthi Backend (ASP.NET Core 10 Web API & Razor Command Center)
+  # --------------------------------------------------------------------------
+  - type: web
+    name: agrisaarthi-backend
+    runtime: docker
+    dockerfilePath: ./backend/AgriSaarthi.Api/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Key
+        generateValue: true
+      - key: AiService__BaseUrl
+        fromService:
+          type: web
+          name: agrisaarthi-ai-service
+          property: host
+
+  # --------------------------------------------------------------------------
+  # 3. AgriSaarthi React Frontend (Vite + Tailwind CSS Static Site)
+  # --------------------------------------------------------------------------
+  - type: web
+    name: agrisaarthi-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    plan: free
+    region: oregon
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: agrisaarthi-backend
+          property: host
