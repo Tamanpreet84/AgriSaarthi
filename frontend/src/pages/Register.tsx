@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ export default function Register() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ export default function Register() {
     let fullName = formData.fullName || 'Taman Preet';
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,7 +52,7 @@ export default function Register() {
           password: formData.password,
           confirmPassword: formData.confirmPassword
         })
-      });
+      }, 2500);
 
       if (res.ok) {
         const data = await res.json();
@@ -64,7 +64,6 @@ export default function Register() {
         throw new Error('Fallback to local session');
       }
     } catch {
-      // Resilient fallback for networks/firewalls blocking external API (e.g. Sophos Firewall)
       const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
       const payload = btoa(JSON.stringify({
         sub: '1',
@@ -83,14 +82,13 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Left side - Branding (Hidden on mobile, 50% width on desktop) */}
+      {/* Left side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-[#0f3d22] items-center justify-center overflow-hidden">
-        {/* Subtle background image overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-20 mix-blend-overlay"
           style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop")', backgroundSize: 'cover', backgroundPosition: 'center' }}
         ></div>
-        
+
         <div className="relative z-10 flex flex-col items-center justify-center p-12 w-full max-w-lg">
           <div className="w-full max-w-[360px] aspect-square bg-white rounded-[40px] flex items-center justify-center shadow-[0_0_60px_rgba(0,0,0,0.3)] p-6 border-[8px] border-white/20 transition-transform duration-500 hover:scale-105">
             <img src={logo} alt="AgriSaarthi Logo" className="w-full h-full object-contain" />
@@ -101,12 +99,10 @@ export default function Register() {
       {/* Right side - Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center py-12 px-6 sm:px-12 lg:px-24 bg-white relative max-h-screen overflow-y-auto custom-scrollbar">
         <div className="mx-auto w-full max-w-md my-auto">
-          
-          {/* Mobile Logo (only shows on mobile) */}
           <div className="lg:hidden text-center mb-6">
             <img src={logo} alt="AgriSaarthi" className="mx-auto h-20 w-auto drop-shadow-sm mb-4 rounded-full border border-emerald-100 p-1 bg-white" />
           </div>
-          
+
           <div className="text-center lg:text-left mb-8">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#145a32] tracking-tight">Register as a Farmer</h2>
             <p className="mt-3 text-base text-slate-600">
@@ -125,7 +121,7 @@ export default function Register() {
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
-                <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#27ae60] focus:border-[#27ae60] sm:text-sm transition-shadow" placeholder="Gurpreet Singh" />
+                <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#27ae60] focus:border-[#27ae60] sm:text-sm transition-shadow" placeholder="Taman Preet Singh" />
               </div>
 
               <div>
@@ -151,7 +147,7 @@ export default function Register() {
               </div>
 
               <div className="pt-4">
-                <button disabled={loading} type="submit" className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-base font-bold text-white bg-[#27ae60] hover:bg-[#1e8449] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#27ae60] disabled:opacity-70 transition-all active:scale-[0.98]">
+                <button disabled={loading} type="submit" className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-base font-bold text-white bg-[#27ae60] hover:bg-[#1e8449] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#27ae60] disabled:opacity-70 transition-all active:scale-[0.98] cursor-pointer">
                   {loading ? 'Creating account...' : 'Create Account'}
                 </button>
               </div>

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
 import { useState, useEffect } from 'react';
 import { 
   Cloud, Droplets, Wind, Calendar, 
@@ -97,9 +97,9 @@ const FALLBACK_ADVISORY: RiskAdvisory = {
 
 export default function Weather() {
   const { token } = useAuth();
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [riskAdvisory, setRiskAdvisory] = useState<RiskAdvisory | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState<WeatherData>(() => buildFallbackWeather());
+  const [riskAdvisory, setRiskAdvisory] = useState<RiskAdvisory>(FALLBACK_ADVISORY);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchWeather();
@@ -108,9 +108,9 @@ export default function Weather() {
   const fetchWeather = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/weather`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/api/weather`, {
         headers: { 'Authorization': `Bearer ${token}` }
-      });
+      }, 2000);
 
       if (res.ok) {
         const data = await res.json();
@@ -121,21 +121,17 @@ export default function Weather() {
         }
 
         try {
-          const advRes = await fetch(`${API_BASE_URL}/api/agri-knowledge/advisory`, {
+          const advRes = await fetchWithTimeout(`${API_BASE_URL}/api/agri-knowledge/advisory`, {
             headers: { 'Authorization': `Bearer ${token}` }
-          });
+          }, 2000);
           if (advRes.ok) {
             const advData = await advRes.json();
             if (Array.isArray(advData?.alerts)) {
               setRiskAdvisory(advData);
-            } else {
-              setRiskAdvisory(FALLBACK_ADVISORY);
             }
-          } else {
-            setRiskAdvisory(FALLBACK_ADVISORY);
           }
         } catch {
-          setRiskAdvisory(FALLBACK_ADVISORY);
+          // Keep existing advisory
         }
         setLoading(false);
         return;
@@ -163,12 +159,8 @@ export default function Weather() {
     </svg>
   );
 
-  if (loading || !weather) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#27ae60]"></div>
-      </div>
-    );
+  if (!weather) {
+    return null;
   }
 
   return (
@@ -184,11 +176,12 @@ export default function Weather() {
         <button
           type="button"
           onClick={fetchWeather}
+          disabled={loading}
           title="Refresh Weather Forecast"
-          className="flex items-center space-x-2 text-slate-600 hover:text-[#27ae60] px-3 py-2 bg-white rounded-lg shadow-sm border border-slate-200 transition-colors cursor-pointer text-xs font-bold"
+          className="flex items-center space-x-2 text-slate-600 hover:text-[#27ae60] px-3 py-2 bg-white rounded-lg shadow-sm border border-slate-200 transition-colors cursor-pointer text-xs font-bold disabled:opacity-60"
         >
-          <RefreshCw size={16} />
-          <span>Refresh</span>
+          <RefreshCw size={16} className={loading ? 'animate-spin text-[#27ae60]' : ''} />
+          <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
         </button>
       </div>
 

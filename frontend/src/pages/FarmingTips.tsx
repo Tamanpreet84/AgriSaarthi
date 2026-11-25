@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../config';
-import { useState, useEffect } from 'react';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Lightbulb, Search, Loader2, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -81,48 +81,44 @@ const FALLBACK_TIPS: FarmingTip[] = [
 
 export default function FarmingTips() {
   const { token } = useAuth();
-  const [tips, setTips] = useState<FarmingTip[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allTips, setAllTips] = useState<FarmingTip[]>(FALLBACK_TIPS);
+  const [loading, setLoading] = useState(false);
 
   const [searchCategory, setSearchCategory] = useState('');
   const [searchCrop, setSearchCrop] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>('ft_1');
 
-  const filterList = (list: FarmingTip[]) => {
-    return list.filter(t => {
-      const matchCat = !searchCategory || t.category.toLowerCase().includes(searchCategory.toLowerCase()) || t.title.toLowerCase().includes(searchCategory.toLowerCase());
+  useEffect(() => {
+    const fetchTips = async () => {
+      try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/api/farming-tips`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }, 2000);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setAllTips(data);
+          }
+        }
+      } catch {
+        // Verified fallback already active
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTips();
+  }, [token]);
+
+  const tips = useMemo(() => {
+    return allTips.filter(t => {
+      const matchCat =
+        !searchCategory ||
+        t.category.toLowerCase().includes(searchCategory.toLowerCase()) ||
+        t.title.toLowerCase().includes(searchCategory.toLowerCase());
       const matchCrop = !searchCrop || t.crop.toLowerCase().includes(searchCrop.toLowerCase());
       return matchCat && matchCrop;
     });
-  };
-
-  const fetchTips = async () => {
-    setLoading(true);
-    try {
-      const query = new URLSearchParams();
-      if (searchCategory) query.append('category', searchCategory);
-      if (searchCrop) query.append('crop', searchCrop);
-
-      const res = await fetch(`${API_BASE_URL}/api/farming-tips?${query.toString()}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setTips(filterList(Array.isArray(data) && data.length > 0 ? data : FALLBACK_TIPS));
-        setLoading(false);
-        return;
-      }
-    } catch {
-      // Fallback gracefully
-    }
-
-    setTips(filterList(FALLBACK_TIPS));
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchTips();
-  }, [token, searchCategory, searchCrop]);
+  }, [allTips, searchCategory, searchCrop]);
 
   return (
     <div className="flex-1 bg-slate-50 min-h-screen pb-12">
@@ -137,7 +133,6 @@ export default function FarmingTips() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Filters */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
             <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
@@ -170,7 +165,6 @@ export default function FarmingTips() {
           )}
         </div>
 
-        {/* Content */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-amber-500 animate-spin mb-4" />
@@ -214,8 +208,8 @@ export default function FarmingTips() {
                     <div className="px-5 pb-5 pt-2 border-t border-slate-100 bg-slate-50/50">
                       <p className="text-sm text-slate-600 mb-4 leading-relaxed">{t.description}</p>
                       <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
-                        <h4 className="text-xs font-bold text-emerald-800 mb-1">Actionable Advice:</h4>
-                        <p className="text-sm text-emerald-700">{t.actionableAdvice}</p>
+                        <h4 className="text-xs font-bold text-emerald-800 dark:text-emerald-300 mb-1">Actionable Advice:</h4>
+                        <p className="text-sm text-emerald-700 dark:text-emerald-400">{t.actionableAdvice}</p>
                       </div>
                     </div>
                   )}

@@ -18,30 +18,30 @@ export const WelcomeSection = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl mb-6 shadow-sm border border-emerald-100 bg-[#e8f3ee]">
+    <div className="relative overflow-hidden rounded-2xl mb-6 shadow-sm border border-emerald-100 dark:border-emerald-900/50 bg-[#e8f3ee] dark:bg-[#132a1f]">
       {/* Background Image full width */}
       <div
-        className="absolute inset-0 w-full h-full opacity-80"
+        className="absolute inset-0 w-full h-full opacity-80 dark:opacity-30"
         style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop")', backgroundSize: 'cover', backgroundPosition: 'center right' }}
       ></div>
 
       {/* Smooth Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#e8f3ee] from-30% via-[#e8f3ee]/80 via-60% to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#e8f3ee] from-30% via-[#e8f3ee]/80 via-60% to-transparent dark:from-[#132a1f] dark:via-[#132a1f]/85"></div>
 
       {/* Content */}
       <div className="relative z-10 px-6 py-8 md:px-8 md:py-10 flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#145a32] mb-1.5 flex items-center drop-shadow-sm">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#145a32] dark:text-emerald-300 mb-1.5 flex items-center drop-shadow-sm">
             {t(greetingKey)}, {firstName}!
           </h2>
-          <p className="text-[#27ae60] font-bold text-sm md:text-base max-w-xl drop-shadow-sm">
+          <p className="text-[#27ae60] dark:text-emerald-400 font-bold text-sm md:text-base max-w-xl drop-shadow-sm">
             {t('welcome_quote')}
           </p>
         </div>
 
         {/* Glassmorphism card */}
-        <div className="hidden md:flex mt-4 md:mt-0 flex-col items-end bg-white/50 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white/60 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
-          <p className="text-[#145a32] font-serif italic font-extrabold tracking-wide text-lg text-right drop-shadow-sm">
+        <div className="hidden md:flex mt-4 md:mt-0 flex-col items-end bg-white/50 dark:bg-slate-900/60 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white/60 dark:border-emerald-800/60 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+          <p className="text-[#145a32] dark:text-emerald-300 font-serif italic font-extrabold tracking-wide text-lg text-right drop-shadow-sm">
             Healthy Farms<br />Brighter Tomorrows
           </p>
         </div>

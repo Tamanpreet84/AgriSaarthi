@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Sprout } from 'lucide-react';
@@ -25,7 +25,7 @@ export default function CropRecommendation() {
     setResult(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/crop-advisory/recommend`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/api/crop-advisory/recommend`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export default function CropRecommendation() {
           ph: Number(formData.ph),
           rainfall: Number(formData.rainfall)
         })
-      });
+      }, 2500);
 
       if (res.ok) {
         const data = await res.json();

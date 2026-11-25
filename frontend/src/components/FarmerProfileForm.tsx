@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { CheckCircle } from 'lucide-react';
@@ -42,9 +42,9 @@ export default function FarmerProfileForm() {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/farmers/${user.id}/profile`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/api/farmers/${user.id}/profile`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        });
+        }, 2000);
 
         if (res.ok) {
           const data = await res.json();
@@ -94,14 +94,14 @@ export default function FarmerProfileForm() {
     } catch { }
 
     try {
-      await fetch(`${API_BASE_URL}/api/farmers/${user.id}/profile`, {
+      await fetchWithTimeout(`${API_BASE_URL}/api/farmers/${user.id}/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(payload)
-      });
+      }, 2000);
     } catch {
       // Saved persistently in localStorage even when campus firewall blocks external API
     }

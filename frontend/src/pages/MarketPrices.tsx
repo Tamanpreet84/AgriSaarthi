@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '../config';
-import { useState, useEffect } from 'react';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LineChart, Search, MapPin, Building, Calendar, Info, Loader2, RefreshCw } from 'lucide-react';
 
@@ -28,46 +28,44 @@ const FALLBACK_PRICES: MarketPrice[] = [
 
 export default function MarketPrices() {
   const { token } = useAuth();
-  const [prices, setPrices] = useState<MarketPrice[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allPrices, setAllPrices] = useState<MarketPrice[]>(FALLBACK_PRICES);
+  const [loading, setLoading] = useState(false);
   const [searchCrop, setSearchCrop] = useState('');
   const [searchState, setSearchState] = useState('');
-
-  const filterList = (list: MarketPrice[]) => {
-    return list.filter(p => {
-      const matchCrop = !searchCrop || p.crop.toLowerCase().includes(searchCrop.toLowerCase());
-      const matchState = !searchState || p.state.toLowerCase().includes(searchState.toLowerCase()) || p.market.toLowerCase().includes(searchState.toLowerCase());
-      return matchCrop && matchState;
-    });
-  };
 
   const fetchPrices = async () => {
     setLoading(true);
     try {
-      const query = new URLSearchParams();
-      if (searchCrop) query.append('crop', searchCrop);
-      if (searchState) query.append('state', searchState);
-
-      const res = await fetch(`${API_BASE_URL}/api/market-prices?${query.toString()}`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/api/market-prices`, {
         headers: { 'Authorization': `Bearer ${token}` }
-      });
+      }, 2000);
       if (res.ok) {
         const data = await res.json();
-        setPrices(filterList(Array.isArray(data) && data.length > 0 ? data : FALLBACK_PRICES));
-        setLoading(false);
-        return;
+        if (Array.isArray(data) && data.length > 0) {
+          setAllPrices(data);
+        }
       }
-    } catch (err) {
-      console.warn('Using verified APMC mandi rates fallback', err);
+    } catch {
+      // Verified APMC fallback already loaded
+    } finally {
+      setLoading(false);
     }
-
-    setPrices(filterList(FALLBACK_PRICES));
-    setLoading(false);
   };
 
   useEffect(() => {
     fetchPrices();
-  }, [token, searchCrop, searchState]);
+  }, [token]);
+
+  const prices = useMemo(() => {
+    return allPrices.filter(p => {
+      const matchCrop = !searchCrop || p.crop.toLowerCase().includes(searchCrop.toLowerCase());
+      const matchState =
+        !searchState ||
+        p.state.toLowerCase().includes(searchState.toLowerCase()) ||
+        p.market.toLowerCase().includes(searchState.toLowerCase());
+      return matchCrop && matchState;
+    });
+  }, [allPrices, searchCrop, searchState]);
 
   return (
     <div className="flex-1 bg-slate-50 min-h-screen pb-12">
@@ -90,16 +88,14 @@ export default function MarketPrices() {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Important Disclaimer */}
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start">
+        <div className="bg-blue-50 dark:bg-sky-950/50 border border-blue-100 dark:border-sky-900 rounded-xl p-4 flex items-start">
           <Info className="w-5 h-5 text-blue-500 mt-0.5 mr-3 shrink-0" />
           <div>
-            <h4 className="font-bold text-blue-800 text-sm">Reference Market Prices</h4>
-            <p className="text-xs text-blue-600 mt-1">Modal auction rates from major agricultural mandis across Punjab, Haryana, and northern regions.</p>
+            <h4 className="font-bold text-blue-800 dark:text-sky-300 text-sm">Reference Market Prices</h4>
+            <p className="text-xs text-blue-600 dark:text-sky-400 mt-1">Modal auction rates from major agricultural mandis across Punjab, Haryana, and northern regions.</p>
           </div>
         </div>
 
-        {/* Filters */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
@@ -132,11 +128,10 @@ export default function MarketPrices() {
           )}
         </div>
 
-        {/* Content */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-[#27ae60] animate-spin mb-4" />
-            <p className="text-slate-500 font-medium">Loading market prices...</p>
+            <p className="text-slate-500 font-medium">Refreshing market prices...</p>
           </div>
         ) : prices.length === 0 ? (
           <div className="bg-white rounded-xl p-12 text-center border border-slate-200 shadow-sm">

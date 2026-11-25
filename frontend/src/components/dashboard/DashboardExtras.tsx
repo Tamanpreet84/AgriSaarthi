@@ -13,7 +13,7 @@ export const BannerCard = ({
         className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
         style={{ backgroundImage: `url("${bgImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent dark:from-[#151f30] dark:via-[#151f30]/95"></div>
 
       <div className="relative z-10 p-4 w-[85%]">
         <div className={`flex items-center mb-1 ${color}`}>

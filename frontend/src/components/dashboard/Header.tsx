@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Bell, LogOut, Menu, Sun, Moon, CheckCheck, AlertTriangle, TrendingUp, CloudSun } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppSettings, type Language } from '../../context/AppSettingsContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -12,10 +12,15 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const { user, logout } = useAuth();
   const { language, setLanguage, theme, toggleTheme, t } = useAppSettings();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [notifOpen, setNotifOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
   const notifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setNotifOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

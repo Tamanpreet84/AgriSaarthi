@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL, fetchWithTimeout } from '../../config';
 import { useState, useEffect } from 'react';
 import { MapPin, Droplets, Maximize, Cloud, ShieldAlert, ArrowUpRight, Target, Activity, Leaf } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,8 +8,21 @@ import { useAppSettings } from '../../context/AppSettingsContext';
 export const FarmOverviewCard = () => {
   const { user, token } = useAuth();
   const { t } = useAppSettings();
-  const [profile, setProfile] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(() => {
+    try {
+      const localSaved = localStorage.getItem('agrisaarthi_profile');
+      if (localSaved) return JSON.parse(localSaved);
+    } catch { }
+    return {
+      village: 'Phagwara',
+      district: 'Kapurthala',
+      primaryCrop: 'Wheat & Rice',
+      soilType: 'Alluvial Loam',
+      farmSize: 4.5,
+      irrigationType: 'Tube Well'
+    };
+  });
+  const [loading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -17,33 +30,20 @@ export const FarmOverviewCard = () => {
         const localSaved = localStorage.getItem('agrisaarthi_profile');
         if (localSaved) {
           setProfile(JSON.parse(localSaved));
-          setLoading(false);
           return;
         }
         if (user?.id && token) {
-          const res = await fetch(`${API_BASE_URL}/api/farmers/${user.id}`, {
+          const res = await fetchWithTimeout(`${API_BASE_URL}/api/farmers/${user.id}`, {
             headers: { 'Authorization': `Bearer ${token}` }
-          });
+          }, 2000);
           if (res.ok) {
             const data = await res.json();
             setProfile(data);
-            return;
           }
         }
-      } catch (err) {
-        console.warn('Using verified fallback farm profile', err);
-      } finally {
-        setLoading(false);
+      } catch {
+        // Default state already visible immediately
       }
-
-      setProfile({
-        village: 'Phagwara',
-        district: 'Kapurthala',
-        primaryCrop: 'Wheat & Rice',
-        soilType: 'Alluvial Loam',
-        farmSize: 4.5,
-        irrigationType: 'Tube Well'
-      });
     };
     fetchProfile();
   }, [user, token]);
@@ -163,37 +163,42 @@ export const CropRecommendationSummaryCard = () => {
 export const WeatherCard = () => {
   const { token } = useAuth();
   const { t } = useAppSettings();
-  const [weather, setWeather] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState<any>(() => {
+    let location = 'Phagwara, Punjab';
+    try {
+      const saved = localStorage.getItem('agrisaarthi_profile');
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.location || p.state) location = [p.location || p.village, p.state].filter(Boolean).join(', ');
+      }
+    } catch { }
+    return {
+      location,
+      current: {
+        temperature: 24.5,
+        humidity: 58,
+        windSpeed: 11.2,
+        condition: 'Sunny & Clear'
+      },
+      advisory: 'Optimal morning conditions for field inspection. Ground moisture is favorable for Rabi crops.'
+    };
+  });
+  const [loading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/weather`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/api/weather`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        });
+        }, 2000);
         if (res.ok) {
           const data = await res.json();
           setWeather(data);
-          return;
         }
-      } catch (err) {
-        console.warn('Using resilient fallback weather', err);
-      } finally {
-        setLoading(false);
+      } catch {
+        // Default weather already visible immediately
       }
-
-      setWeather({
-        location: 'Phagwara, Punjab',
-        current: {
-          temperature: 24.5,
-          humidity: 58,
-          windSpeed: 11.2,
-          condition: 'Sunny & Clear'
-        },
-        advisory: 'Optimal morning conditions for field inspection. Ground moisture is favorable for Rabi crops.'
-      });
     };
     fetchWeather();
   }, [token]);

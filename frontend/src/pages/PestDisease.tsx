@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, fetchWithTimeout } from '../config';
 import { useState, useEffect } from 'react';
 import { ShieldAlert, Bug, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -158,9 +158,9 @@ export default function PestDisease() {
 
   const fetchCrops = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/agri-knowledge/crops`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/api/agri-knowledge/crops`, {
         headers: { 'Authorization': `Bearer ${token}` }
-      });
+      }, 2000);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
@@ -177,12 +177,12 @@ export default function PestDisease() {
     setLoading(true);
     try {
       const [dRes, pRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/agri-knowledge/diseases?crop=${cropId}`, {
+        fetchWithTimeout(`${API_BASE_URL}/api/agri-knowledge/diseases?crop=${cropId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${API_BASE_URL}/api/agri-knowledge/pests?crop=${cropId}`, {
+        }, 2000),
+        fetchWithTimeout(`${API_BASE_URL}/api/agri-knowledge/pests?crop=${cropId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
-        })
+        }, 2000)
       ]);
 
       let gotDiseases: any[] = [];

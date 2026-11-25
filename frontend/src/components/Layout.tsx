@@ -20,22 +20,19 @@ export const AppLayout = () => {
 
   return (
     <div className="flex h-screen bg-[#f3f7f5] overflow-hidden">
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block w-[280px] flex-shrink-0 z-20">
-        <Sidebar />
+      {/* Unified Sidebar (Desktop Column + Mobile Drawer) */}
+      <div className="lg:w-[270px] lg:flex-shrink-0 z-30">
+        <Sidebar isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       </div>
 
-      {/* Mobile Slide-over Sidebar */}
-      <Sidebar isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        {/* Header */}
-        <header className="z-10">
+        {/* Header with elevated z-index so dropdowns float cleanly above dashboard cards */}
+        <header className="relative z-40">
           <Header onMenuClick={() => setMobileMenuOpen(true)} />
         </header>
 
         {/* Main scrollable content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8 pb-24 lg:pb-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8 pb-24 lg:pb-8 relative z-10">
           <Outlet />
         </main>
 
