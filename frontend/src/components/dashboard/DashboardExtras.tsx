@@ -2,28 +2,28 @@ import React from 'react';
 import { ArrowRight, Leaf, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const BannerCard = ({ 
-  title, subtitle, buttonText, icon, bgImage, color, to 
-}: { 
-  title: string, subtitle: string, buttonText: string, icon: React.ReactNode, bgImage: string, color: string, to: string 
+export const BannerCard = ({
+  title, subtitle, buttonText, icon, bgImage, color, to
+}: {
+  title: string, subtitle: string, buttonText: string, icon: React.ReactNode, bgImage: string, color: string, to: string
 }) => {
   return (
     <Link to={to} className="relative overflow-hidden rounded-2xl shadow-sm group cursor-pointer h-full border border-slate-100 flex flex-col justify-end min-h-[130px] block transition-transform hover:-translate-y-1">
-      <div 
+      <div
         className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
         style={{ backgroundImage: `url("${bgImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent"></div>
-      
+
       <div className="relative z-10 p-4 w-[85%]">
         <div className={`flex items-center mb-1 ${color}`}>
           {icon}
           <h4 className="font-extrabold text-slate-800 ml-2 text-sm">{title}</h4>
         </div>
         <p className="text-[11px] font-medium text-slate-500 mb-2 leading-snug">{subtitle}</p>
-        <button className={`bg-[#145a32] hover:bg-[#27ae60] text-white text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md flex items-center transition-colors shadow-sm w-fit`}>
+        <span className="bg-[#145a32] group-hover:bg-[#27ae60] text-white text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md inline-flex items-center transition-colors shadow-sm w-fit">
           {buttonText} <ArrowRight size={10} className="ml-1" />
-        </button>
+        </span>
       </div>
     </Link>
   );
@@ -32,7 +32,7 @@ export const BannerCard = ({
 export const ExtrasRow = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <BannerCard 
+      <BannerCard
         title="Farming Tips"
         subtitle="Small steps make a big difference."
         buttonText="Explore Tips"
@@ -41,7 +41,7 @@ export const ExtrasRow = () => {
         color="text-amber-600"
         to="/farming-tips"
       />
-      <BannerCard 
+      <BannerCard
         title="Sustainable Farming"
         subtitle="Use technology. Grow responsibly."
         buttonText="Learn More"
@@ -50,7 +50,7 @@ export const ExtrasRow = () => {
         color="text-[#27ae60]"
         to="/knowledge-hub"
       />
-      <BannerCard 
+      <BannerCard
         title="Join Our Community"
         subtitle="Share experiences, learn from others."
         buttonText="Join Now"

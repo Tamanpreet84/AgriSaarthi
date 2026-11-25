@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -19,4 +20,75 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Comprehensive High-Contrast Dark Mode System Overrides */
+html.dark body {
+  background-color: #0b1320;
+  color: #e2e8f0;
+}
+
+html.dark .bg-\[\#f3f7f5\],
+html.dark .bg-slate-50,
+html.dark .bg-gray-50 {
+  background-color: #0b1320 !important;
+}
+
+html.dark .bg-white,
+html.dark .bg-slate-50\/30,
+html.dark .bg-slate-50\/50 {
+  background-color: #151f30 !important;
+  border-color: #243447 !important;
+}
+
+html.dark .bg-\[\#f8fbf9\] {
+  background-color: #182538 !important;
+}
+
+html.dark .bg-\[\#eefaf4\],
+html.dark .bg-\[\#e8f3ee\],
+html.dark .bg-emerald-50 {
+  background-color: #143326 !important;
+  border-color: #1f4d3a !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-50,
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-emerald-100 {
+  border-color: #243447 !important;
+}
+
+html.dark .text-slate-800,
+html.dark .text-slate-900,
+html.dark .text-slate-700,
+html.dark .text-gray-800,
+html.dark .text-gray-700 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-\[\#145a32\] {
+  color: #6ee7b7 !important;
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500,
+html.dark .text-gray-600,
+html.dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #182436 !important;
+  color: #f8fafc !important;
+  border-color: #334760 !important;
+}
+
+html.dark .bg-slate-100 {
+  background-color: #1e2d42 !important;
+  color: #cbd5e1 !important;
 }

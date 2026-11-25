@@ -2,45 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useAppSettings } from '../../context/AppSettingsContext';
 
 export const WelcomeSection = () => {
   const { user } = useAuth();
+  const { t } = useAppSettings();
   const firstName = user?.fullName?.split(' ')[0] || 'Farmer';
-  const [greeting, setGreeting] = useState('Welcome');
+  const [greetingKey, setGreetingKey] = useState<'greeting_morning' | 'greeting_afternoon' | 'greeting_evening'>('greeting_morning');
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 18) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
+    if (hour < 12) setGreetingKey('greeting_morning');
+    else if (hour < 18) setGreetingKey('greeting_afternoon');
+    else setGreetingKey('greeting_evening');
   }, []);
 
   return (
     <div className="relative overflow-hidden rounded-2xl mb-6 shadow-sm border border-emerald-100 bg-[#e8f3ee]">
       {/* Background Image full width */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full opacity-80"
         style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop")', backgroundSize: 'cover', backgroundPosition: 'center right' }}
       ></div>
-      
-      {/* Smooth Gradient Overlay: Solid on left, smoothly blending to transparent on right */}
+
+      {/* Smooth Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#e8f3ee] from-30% via-[#e8f3ee]/80 via-60% to-transparent"></div>
-      
+
       {/* Content */}
       <div className="relative z-10 px-6 py-8 md:px-8 md:py-10 flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
           <h2 className="text-2xl md:text-3xl font-extrabold text-[#145a32] mb-1.5 flex items-center drop-shadow-sm">
-            {greeting}, {firstName}!
+            {t(greetingKey)}, {firstName}!
           </h2>
           <p className="text-[#27ae60] font-bold text-sm md:text-base max-w-xl drop-shadow-sm">
-            "Better Information. Healthier Crops. A Prosperous Tomorrow."
+            {t('welcome_quote')}
           </p>
         </div>
-        
-        {/* Glassmorphism card for text readability on the right side */}
+
+        {/* Glassmorphism card */}
         <div className="hidden md:flex mt-4 md:mt-0 flex-col items-end bg-white/50 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white/60 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
           <p className="text-[#145a32] font-serif italic font-extrabold tracking-wide text-lg text-right drop-shadow-sm">
-            Healthy Farms<br/>Brighter Tomorrows
+            Healthy Farms<br />Brighter Tomorrows
           </p>
         </div>
       </div>
@@ -48,10 +50,10 @@ export const WelcomeSection = () => {
   );
 };
 
-export const SummaryCard = ({ 
-  title, value, subtitle, icon, colorClass, to 
-}: { 
-  title: string, value: string, subtitle: string, icon: React.ReactNode, colorClass: string, to: string 
+export const SummaryCard = ({
+  title, value, subtitle, icon, colorClass, to
+}: {
+  title: string, value: string, subtitle: string, icon: React.ReactNode, colorClass: string, to: string
 }) => {
   return (
     <Link to={to} className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center justify-between group hover:border-emerald-200 transition-colors cursor-pointer relative overflow-hidden">

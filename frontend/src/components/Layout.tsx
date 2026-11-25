@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useAppSettings } from '../context/AppSettingsContext';
 import Sidebar from './dashboard/Sidebar';
 import Header from './dashboard/Header';
 import { Home, Leaf, ScanLine, IndianRupee, Menu } from 'lucide-react';
@@ -12,6 +14,8 @@ export const ProtectedRoute = () => {
 
 export const AppLayout = () => {
   const location = useLocation();
+  const { t } = useAppSettings();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -21,10 +25,13 @@ export const AppLayout = () => {
         <Sidebar />
       </div>
 
+      {/* Mobile Slide-over Sidebar */}
+      <Sidebar isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Header */}
         <header className="z-10">
-          <Header />
+          <Header onMenuClick={() => setMobileMenuOpen(true)} />
         </header>
 
         {/* Main scrollable content */}
@@ -33,10 +40,10 @@ export const AppLayout = () => {
         </main>
 
         {/* Mobile Bottom Navigation */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 flex justify-around items-center h-16 px-2 safe-area-bottom">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40 flex justify-around items-center h-16 px-2 safe-area-bottom">
           <Link to="/dashboard" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/dashboard') ? 'text-[#145a32]' : 'text-slate-500'}`}>
             <Home size={20} className={isActive('/dashboard') ? 'fill-current' : ''} />
-            <span className="text-[10px] font-medium">Home</span>
+            <span className="text-[10px] font-medium">{t('nav_dashboard').split(' ')[0]}</span>
           </Link>
           <Link to="/crop-recommendation" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive('/crop-recommendation') ? 'text-[#145a32]' : 'text-slate-500'}`}>
             <Leaf size={20} className={isActive('/crop-recommendation') ? 'fill-current' : ''} />
@@ -50,7 +57,11 @@ export const AppLayout = () => {
             <IndianRupee size={20} />
             <span className="text-[10px] font-medium">Prices</span>
           </Link>
-          <button className="flex flex-col items-center justify-center w-full h-full space-y-1 text-slate-500">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex flex-col items-center justify-center w-full h-full space-y-1 text-slate-500 hover:text-[#145a32] cursor-pointer"
+          >
             <Menu size={20} />
             <span className="text-[10px] font-medium">More</span>
           </button>

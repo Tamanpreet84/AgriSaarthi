@@ -57,6 +57,23 @@ export default function Login() {
     setLoading(false);
   };
 
+  const handleDemoLogin = () => {
+    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+    const payload = btoa(JSON.stringify({
+      sub: '1',
+      id: 1,
+      email: 'tamanpreet0007@gmail.com',
+      fullName: 'Taman Preet Singh',
+      exp: Math.floor(Date.now() / 1000) + 365 * 24 * 3600
+    }));
+    login(`${header}.${payload}.sig`, {
+      id: 1,
+      email: 'tamanpreet0007@gmail.com',
+      fullName: 'Taman Preet Singh'
+    });
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen flex bg-white">
       {/* Left side - Branding (Hidden on mobile, 50% width on desktop) */}
@@ -109,9 +126,12 @@ export default function Login() {
                 <input required type="password" value={password} onChange={e => setPassword(e.target.value)} className="appearance-none block w-full px-4 py-3 border border-slate-300 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#27ae60] focus:border-[#27ae60] sm:text-sm transition-shadow" placeholder="••••••••" />
               </div>
 
-              <div className="pt-2">
-                <button disabled={loading} type="submit" className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-base font-bold text-white bg-[#27ae60] hover:bg-[#1e8449] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#27ae60] disabled:opacity-70 transition-all active:scale-[0.98]">
+              <div className="pt-2 space-y-3">
+                <button disabled={loading} type="submit" className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-base font-bold text-white bg-[#27ae60] hover:bg-[#1e8449] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#27ae60] disabled:opacity-70 transition-all active:scale-[0.98] cursor-pointer">
                   {loading ? 'Signing in...' : 'Sign in'}
+                </button>
+                <button type="button" onClick={handleDemoLogin} className="w-full flex justify-center py-3 px-4 border border-emerald-200 rounded-xl text-sm font-bold text-[#145a32] bg-emerald-50 hover:bg-emerald-100 transition-all cursor-pointer">
+                  Instant Demo Sign In (Taman Preet Singh)
                 </button>
               </div>
             </form>

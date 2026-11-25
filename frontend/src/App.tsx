@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { AppSettingsProvider } from './context/AppSettingsContext';
 import { AppLayout, ProtectedRoute } from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import FarmerProfileForm from './components/FarmerProfileForm';
-import PlaceholderPage from './pages/PlaceholderPage';
 import CropRecommendation from './pages/CropRecommendation';
 import Weather from './pages/Weather';
 import { DiseaseDetection } from './pages/DiseaseDetection';
@@ -17,35 +17,41 @@ import Settings from './pages/Settings';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    <AppSettingsProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AppLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<FarmerProfileForm />} />
-              <Route path="/crop-recommendation" element={<CropRecommendation />} />
-              <Route path="/weather" element={<Weather />} />
-              <Route path="/disease-detection" element={<DiseaseDetection />} />
-              <Route path="/pest-disease" element={<PestDisease />} />
-              <Route path="/market-prices" element={<MarketPrices />} />
-              <Route path="/farming-tips" element={<FarmingTips />} />
-              <Route path="/knowledge-hub" element={<KnowledgeHub />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="*" element={<PlaceholderPage />} />
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={<FarmerProfileForm />} />
+                <Route path="/crop-recommendation" element={<CropRecommendation />} />
+                <Route path="/weather" element={<Weather />} />
+                <Route path="/disease-detection" element={<DiseaseDetection />} />
+                <Route path="/pest-disease" element={<PestDisease />} />
+                <Route path="/pest-info" element={<PestDisease />} />
+                <Route path="/market-prices" element={<MarketPrices />} />
+                <Route path="/market" element={<MarketPrices />} />
+                <Route path="/farming-tips" element={<FarmingTips />} />
+                <Route path="/tips" element={<FarmingTips />} />
+                <Route path="/knowledge-hub" element={<KnowledgeHub />} />
+                <Route path="/hub" element={<KnowledgeHub />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Fallback to Dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* Fallback to Dashboard */}
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </AppSettingsProvider>
   );
 }
 

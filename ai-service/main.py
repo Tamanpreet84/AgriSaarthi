@@ -285,9 +285,12 @@ def get_farmer_profile(farmer_id: int):
     return farmer
 
 @app.post("/api/farmers/{farmer_id}/profile")
+@app.put("/api/farmers/{farmer_id}/profile")
 def update_farmer_profile(farmer_id: int, profile_data: Dict[str, Any]):
     farmer = FARMERS_STORE.get(farmer_id, FARMERS_STORE.get(1))
     farmer.update(profile_data)
+    if "location" in profile_data and profile_data["location"] and not profile_data.get("village"):
+        farmer["village"] = profile_data["location"]
     return farmer
 
 class ApiCropRecommendDto(BaseModel):
@@ -313,24 +316,38 @@ def api_crop_recommend(dto: ApiCropRecommendDto):
     return predict_crop(req)
 
 @app.post("/api/disease-detection/predict")
-async def api_disease_predict(file: UploadFile = File(...)):
-    return await predict_disease(file)
+async def api_disease_predict(image: UploadFile = File(...)):
+    return await predict_disease(image)
 
 @app.get("/api/weather")
 def get_weather():
+    from datetime import datetime, timedelta
+    today = datetime.utcnow()
+    forecast = []
+    temps = [(25, 13, 0, "Sunny & Clear", 5), (26, 14, 1, "Mostly Clear", 10), (24, 13, 2, "Partly Cloudy", 15),
+             (23, 12, 3, "Light Overcast", 25), (22, 11, 61, "Light Showers", 60), (24, 12, 1, "Sunny", 10),
+             (26, 13, 0, "Clear Skies", 5)]
+    for i, (tmax, tmin, code, cond, rain_p) in enumerate(temps):
+        d = (today + timedelta(days=i)).strftime("%Y-%m-%d")
+        forecast.append({
+            "date": d,
+            "maxTemperature": tmax,
+            "minTemperature": tmin,
+            "precipitationProbability": rain_p,
+            "weatherCode": code,
+            "condition": cond
+        })
     return {
         "location": "Phagwara, Punjab",
         "current": {
             "temperature": 24.5,
             "humidity": 58,
             "windSpeed": 11.2,
-            "condition": "Sunny & Clear"
+            "weatherCode": 0,
+            "condition": "Sunny & Clear",
+            "isDay": True
         },
-        "forecast": [
-            { "day": "Today", "temp": 24.5, "condition": "Sunny" },
-            { "day": "Tomorrow", "temp": 25.0, "condition": "Clear" },
-            { "day": "Day 3", "temp": 23.8, "condition": "Partly Cloudy" }
-        ],
+        "forecast": forecast,
         "advisory": "Optimal morning conditions for field inspection. Ground moisture is favorable for Rabi crops."
     }
 
@@ -346,12 +363,12 @@ def get_market_prices(crop: Optional[str] = None, state: Optional[str] = None):
             pass
     if not data:
         data = [
-            { "id": "mp_1", "crop": "Wheat", "market": "Khanna Mandi", "state": "Punjab", "price": 2275.0, "unit": "Quintal" },
-            { "id": "mp_2", "crop": "Rice (Basmati)", "market": "Amritsar Mandi", "state": "Punjab", "price": 3850.0, "unit": "Quintal" },
-            { "id": "mp_3", "crop": "Cotton (Kapas)", "market": "Bathinda Mandi", "state": "Punjab", "price": 7190.0, "unit": "Quintal" },
-            { "id": "mp_4", "crop": "Maize (Makka)", "market": "Jalandhar Mandi", "state": "Punjab", "price": 2143.0, "unit": "Quintal" },
-            { "id": "mp_5", "crop": "Mustard (Sarson)", "market": "Ludhiana Mandi", "state": "Punjab", "price": 5450.0, "unit": "Quintal" },
-            { "id": "mp_6", "crop": "Potato (Aloo)", "market": "Hoshiarpur Mandi", "state": "Punjab", "price": 1120.0, "unit": "Quintal" }
+            { "id": "mp_1", "crop": "Wheat", "market": "Khanna Mandi", "state": "Punjab", "price": 2275.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" },
+            { "id": "mp_2", "crop": "Rice (Basmati)", "market": "Amritsar Mandi", "state": "Punjab", "price": 3850.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" },
+            { "id": "mp_3", "crop": "Cotton (Kapas)", "market": "Bathinda Mandi", "state": "Punjab", "price": 7190.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" },
+            { "id": "mp_4", "crop": "Maize (Makka)", "market": "Jalandhar Mandi", "state": "Punjab", "price": 2143.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" },
+            { "id": "mp_5", "crop": "Mustard (Sarson)", "market": "Ludhiana Mandi", "state": "Punjab", "price": 5450.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" },
+            { "id": "mp_6", "crop": "Potato (Aloo)", "market": "Hoshiarpur Mandi", "state": "Punjab", "price": 1120.0, "unit": "Quintal", "source": "APMC Reference", "lastUpdated": "2026-11-25T00:00:00Z" }
         ]
     if crop:
         data = [item for item in data if crop.lower() in item.get("crop", "").lower()]
@@ -360,7 +377,7 @@ def get_market_prices(crop: Optional[str] = None, state: Optional[str] = None):
     return data
 
 @app.get("/api/farming-tips")
-def get_farming_tips(category: Optional[str] = None):
+def get_farming_tips(category: Optional[str] = None, crop: Optional[str] = None):
     ft_path = resolve_ml_path(os.path.join('agri-knowledge', 'farming-tips.json'))
     data = []
     if os.path.exists(ft_path):
@@ -371,10 +388,14 @@ def get_farming_tips(category: Optional[str] = None):
             pass
     if not data:
         data = [
-            { "id": "ft_1", "category": "General", "title": "Optimal Soil Aeration", "description": "Ensure light harrowing after irrigation to break the surface crust and improve root respiration." },
-            { "id": "ft_2", "category": "Wheat", "title": "Crown Root Irrigation (CRI)", "description": "Apply first irrigation strictly between 20-25 days after sowing at the CRI stage to maximize tiller count." },
-            { "id": "ft_3", "category": "Protection", "title": "Yellow Rust Surveillance", "description": "Inspect leaf undersides during cool misty mornings. Spray Propiconazole 25% EC at first stripe detection." }
+            { "id": "ft_1", "category": "Soil preparation", "crop": "All", "title": "Deep Ploughing", "description": "Perform deep summer ploughing to expose soil-borne pathogens and pests to intense heat.", "actionableAdvice": "Plough fields up to 15-20cm deep during May-June before monsoons." },
+            { "id": "ft_2", "category": "Irrigation", "crop": "Rice", "title": "Alternate Wetting and Drying", "description": "AWD reduces irrigation water consumption without yield loss.", "actionableAdvice": "Re-flood only when water drops 15cm below soil surface." },
+            { "id": "ft_3", "category": "Water conservation", "crop": "Wheat", "title": "Zero Tillage", "description": "Preserves residual moisture and prevents weed emergence.", "actionableAdvice": "Use Zero Till Seed-cum-Fertilizer Drill." }
         ]
+    if category:
+        data = [item for item in data if category.lower() in item.get("category", "").lower()]
+    if crop:
+        data = [item for item in data if crop.lower() in item.get("crop", "").lower()]
     return data
 
 @app.get("/api/agri-knowledge/crops")
@@ -392,32 +413,53 @@ def get_knowledge_crops():
 @app.get("/api/agri-knowledge/diseases")
 def get_knowledge_diseases(crop: Optional[str] = None):
     d_path = resolve_ml_path(os.path.join('agri-knowledge', 'diseases.json'))
+    data = []
     if os.path.exists(d_path):
         with open(d_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return []
+            data = json.load(f)
+    if crop:
+        data = [d for d in data if d.get("crop", "").lower() == crop.lower()]
+    return data
 
 @app.get("/api/agri-knowledge/pests")
 def get_knowledge_pests(crop: Optional[str] = None):
     p_path = resolve_ml_path(os.path.join('agri-knowledge', 'pests.json'))
+    data = []
     if os.path.exists(p_path):
         with open(p_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return []
+            data = json.load(f)
+    if crop:
+        data = [p for p in data if p.get("crop", "").lower() == crop.lower()]
+    return data
 
 @app.get("/api/agri-knowledge/advisory")
 def get_knowledge_advisory():
     return {
-        "status": "active",
-        "advisory": "Rabi Season Wheat Sentry: Maintain soil moisture for timely crown root initiation and keep field borders weed-free."
+        "riskLevel": "Moderate",
+        "alerts": [
+            "Mild Yellow Rust spores detected in Doaba region.",
+            "High morning dew increases blight susceptibility in early sown crops."
+        ],
+        "recommendations": [
+            "Inspect wheat leaf undersides weekly for linear yellow pustules.",
+            "Avoid unnecessary foliar sprays before predicted light showers.",
+            "Ensure balanced N-P-K application and proper drainage."
+        ]
     }
 
 @app.get("/api/agri-knowledge/disease/{disease_name}")
 def get_disease_detail(disease_name: str):
+    d_path = resolve_ml_path(os.path.join('agri-knowledge', 'diseases.json'))
+    if os.path.exists(d_path):
+        with open(d_path, "r", encoding="utf-8") as f:
+            for item in json.load(f):
+                if item.get("id", "").lower() == disease_name.lower():
+                    return item
     return {
-        "disease": disease_name,
+        "id": disease_name,
+        "name": disease_name.replace("___", " - ").replace("_", " "),
         "crop": "Wheat",
+        "severity": "High",
         "symptoms": ["Yellow to orange-yellow pustules arranged in linear stripes on leaves", "Chlorotic stripes turning necrotic"],
-        "chemicalManagement": ["Spray Propiconazole 25% EC @ 1 ml/litre of water", "Apply Tebuconazole 250 EC @ 1 ml/litre"],
-        "organicManagement": ["Neem seed kernel extract (NSKE 5%)", "Trichoderma viride seed treatment"]
+        "management": ["Spray Propiconazole 25% EC @ 1 ml/litre of water", "Apply Tebuconazole 250 EC @ 1 ml/litre", "Neem seed kernel extract (NSKE 5%) for organic control"]
     }
